@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import jakarta.validation.constraints.*;
 import lombok.Data;
+import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
 
@@ -12,6 +13,7 @@ import java.time.LocalDateTime;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
+@SuperBuilder
 @Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "users")
 public class User {
@@ -35,8 +37,7 @@ public class User {
     @NotBlank(message = "Password is required")
     private String password;
 
-    @NotBlank
-    @Size(max = 50)
+    @Enumerated(EnumType.STRING)
     private Role role;
 
     private LocalDateTime createdAt = LocalDateTime.now();
