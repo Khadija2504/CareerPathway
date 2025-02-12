@@ -1,8 +1,7 @@
 package com.CareerPathway.CareerPathway.controller;
 
 import com.CareerPathway.CareerPathway.dto.AuthRequest;
-import com.CareerPathway.CareerPathway.dto.UserDTO;
-import com.CareerPathway.CareerPathway.mapper.UserMapper;
+import com.CareerPathway.CareerPathway.dto.RegistrationDTO;
 import com.CareerPathway.CareerPathway.model.User;
 import com.CareerPathway.CareerPathway.service.UserService;
 import com.CareerPathway.CareerPathway.util.PasswordUtil;
@@ -35,8 +34,16 @@ public class AuthController {
 
     @Autowired
     private UserService userService;
-    @Autowired
-    private UserMapper userMapper;
+
+    @PostMapping("/register")
+    public ResponseEntity<?> registerUser(@RequestBody RegistrationDTO registrationDTO) {
+        try {
+            User user = userService.registerUser(registrationDTO);
+            return ResponseEntity.status(HttpStatus.CREATED).body(user);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody AuthRequest authRequest) {

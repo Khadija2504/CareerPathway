@@ -5,7 +5,7 @@ import jakarta.validation.constraints.*;
 import lombok.Data;
 
 @Data
-public class UserDTO {
+public class RegistrationDTO {
     @NotBlank(message = "First name is required")
     @Size(max = 100, message = "First name cannot exceed 100 characters")
     private String firstName;
@@ -22,7 +22,14 @@ public class UserDTO {
     @Size(min = 8, message = "Password must be at least 8 characters")
     private String password;
 
-    @NotBlank(message = "Role is required")
-    @Pattern(regexp = "ADMIN|EMPLOYEE|MENTOR", message = "Invalid role")
+    @NotNull(message = "Role is required")
     private Role role;
+
+    // for employee
+    private String department;
+    private String jobTitle;
+
+    // for mentor
+    private String expertiseArea;
+    private Integer yearsOfExperience;
 }
