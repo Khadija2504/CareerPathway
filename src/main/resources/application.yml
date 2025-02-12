@@ -1,0 +1,24 @@
+spring:
+  application:
+    name: CareerPathway
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/CareerPathway
+    username: postgres
+    password: 123456789
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+jwt:
+  secret: f6fbccba3855c01297f5c39e8bd5ef9c4ad57a44c9d3d26032162f59daec4a8c
+  expiration:
+    time: 3600000
+server:
+  port: 8800
+  ssl:
+    enabled: false
