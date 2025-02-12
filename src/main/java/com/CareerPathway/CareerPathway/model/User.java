@@ -12,7 +12,6 @@ import java.time.LocalDateTime;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 @Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "users")
 public class User {
@@ -34,7 +33,7 @@ public class User {
     private String email;
 
     @NotBlank(message = "Password is required")
-    private String passwordHash;
+    private String password;
 
     @NotBlank
     @Size(max = 50)
