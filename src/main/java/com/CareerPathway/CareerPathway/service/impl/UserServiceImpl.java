@@ -64,6 +64,37 @@ private UserRepository userRepository;
     }
 
     @Override
+    public User updateUserDetails(long id, RegistrationDTO registrationDTO) {
+        Optional<User> optionalUser = userRepository.findById(id);
+
+        if (optionalUser.isEmpty()) {
+            throw new RuntimeException("User not found");
+        }
+
+        User user = optionalUser.get();
+
+        user.setFirstName(registrationDTO.getFirstName());
+        user.setLastName(registrationDTO.getLastName());
+        user.setEmail(registrationDTO.getEmail());
+        user.setPassword(PasswordUtil.hashPassword(registrationDTO.getPassword()));
+        user.setRole(registrationDTO.getRole());
+
+        if (registrationDTO.getRole() == Role.EMPLOYEE) {
+            Employee employee = (Employee) user;
+            employee.setDepartment(registrationDTO.getDepartment());
+            employee.setJobTitle(registrationDTO.getJobTitle());
+        } else if (registrationDTO.getRole() == Role.MENTOR) {
+            Mentor mentor = (Mentor) user;
+            mentor.setExpertiseArea(registrationDTO.getExpertiseArea());
+            mentor.setYearsOfExperience(registrationDTO.getYearsOfExperience());
+        } else {
+            throw new RuntimeException("Invalid role");
+        }
+
+        return userRepository.save(user);
+    }
+
+    @Override
     public User userDetails(long id) {
         if (userRepository.findById(id).isPresent()) {
             return userRepository.findById(id).orElse(null);

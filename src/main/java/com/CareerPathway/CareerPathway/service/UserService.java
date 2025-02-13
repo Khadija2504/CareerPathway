@@ -11,4 +11,5 @@ public interface UserService {
     Optional<User> findByEmail(String email);
     User registerUser(RegistrationDTO user);
     User userDetails(long id);
+    User updateUserDetails(long id, RegistrationDTO user);
 }
