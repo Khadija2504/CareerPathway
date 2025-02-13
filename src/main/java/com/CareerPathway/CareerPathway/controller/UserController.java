@@ -24,7 +24,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(userDetails);
     }
 
-    @PostMapping("/updateUserDetails")
+    @PutMapping("/updateUserDetails")
     public ResponseEntity<?> updateUserDetails(@RequestBody RegistrationDTO registrationDTO, HttpServletRequest request) {
         int userId = Integer.parseInt(request.getAttribute("userId").toString());
         try {
