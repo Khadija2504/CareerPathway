@@ -1,5 +1,6 @@
 package com.CareerPathway.CareerPathway.controller;
 
+import com.CareerPathway.CareerPathway.dto.RegistrationDTO;
 import com.CareerPathway.CareerPathway.model.User;
 import com.CareerPathway.CareerPathway.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -7,9 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Role;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/user")
@@ -23,5 +22,16 @@ public class UserController {
         System.out.println(userId);
         User userDetails = userService.userDetails(userId);
         return ResponseEntity.status(HttpStatus.OK).body(userDetails);
+    }
+
+    @PostMapping("/updateUserDetails")
+    public ResponseEntity<?> updateUserDetails(@RequestBody RegistrationDTO registrationDTO, HttpServletRequest request) {
+        int userId = Integer.parseInt(request.getAttribute("userId").toString());
+        try {
+            User user = userService.updateUserDetails(userId, registrationDTO);
+            return ResponseEntity.status(HttpStatus.CREATED).body(user);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
     }
 }
