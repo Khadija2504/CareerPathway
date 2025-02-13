@@ -62,4 +62,13 @@ private UserRepository userRepository;
 
         return userRepository.save(user);
     }
+
+    @Override
+    public User userDetails(long id) {
+        if (userRepository.findById(id).isPresent()) {
+            return userRepository.findById(id).orElse(null);
+        } else {
+            throw new RuntimeException("user not found");
+        }
+    }
 }
