@@ -19,6 +19,10 @@ public class EmployeeGoal {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @ManyToOne
+    @JoinColumn(name = "employee_id")
+    private User employee;
+
     private String goalDescription;
     private LocalDate targetDate;
     private GoalStatus status;

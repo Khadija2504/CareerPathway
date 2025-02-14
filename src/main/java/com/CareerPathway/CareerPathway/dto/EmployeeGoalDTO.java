@@ -1,5 +1,6 @@
 package com.CareerPathway.CareerPathway.dto;
 
+import com.CareerPathway.CareerPathway.model.User;
 import com.CareerPathway.CareerPathway.model.enums.GoalStatus;
 import com.CareerPathway.CareerPathway.model.enums.GoalType;
 import jakarta.validation.constraints.*;
@@ -12,6 +13,9 @@ public class EmployeeGoalDTO {
     @NotBlank(message = "Goal description is required")
     @Size(max = 500, message = "Description cannot exceed 500 characters")
     private String goalDescription;
+
+//    @NotNull(message = "Mentee ID is required")
+//    private Long employeeId;
 
     @NotNull(message = "Target date is required")
     @Future(message = "Target date must be in the future")
