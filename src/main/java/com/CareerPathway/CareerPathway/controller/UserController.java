@@ -8,7 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Role;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/user")
@@ -25,7 +29,13 @@ public class UserController {
     }
 
     @PutMapping("/updateUserDetails")
-    public ResponseEntity<?> updateUserDetails(@RequestBody RegistrationDTO registrationDTO, HttpServletRequest request) {
+    public ResponseEntity<?> updateUserDetails(@RequestBody RegistrationDTO registrationDTO, HttpServletRequest request, BindingResult result) {
+        if (result.hasErrors()) {
+            List<String> errors = result.getFieldErrors().stream()
+                    .map(error -> error.getField() + ": " + error.getDefaultMessage())
+                    .collect(Collectors.toList());
+            return ResponseEntity.badRequest().body(errors);
+        }
         int userId = Integer.parseInt(request.getAttribute("userId").toString());
         try {
             User user = userService.updateUserDetails(userId, registrationDTO);
