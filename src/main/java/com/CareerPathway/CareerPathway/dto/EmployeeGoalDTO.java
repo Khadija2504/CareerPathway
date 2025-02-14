@@ -18,7 +18,7 @@ public class EmployeeGoalDTO {
 //    private Long employeeId;
 
     @NotNull(message = "Target date is required")
-    @Future(message = "Target date must be in the future")
+    @Future(message = "Target datemust be in the future")
     private LocalDate targetDate;
 
     @Pattern(regexp = "NOT_STARTED|IN_PROGRESS|COMPLETED",

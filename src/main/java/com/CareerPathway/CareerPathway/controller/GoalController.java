@@ -1,6 +1,7 @@
 package com.CareerPathway.CareerPathway.controller;
 
 import com.CareerPathway.CareerPathway.dto.EmployeeGoalDTO;
+import com.CareerPathway.CareerPathway.dto.GoalUpdateDTO;
 import com.CareerPathway.CareerPathway.mapper.GoalMapper;
 import com.CareerPathway.CareerPathway.model.EmployeeGoal;
 import com.CareerPathway.CareerPathway.model.User;
@@ -52,5 +53,11 @@ public class GoalController {
         int userId = Integer.parseInt(request.getAttribute("userId").toString());
         List<EmployeeGoal> goals = goalService.getGoals((long) userId);
         return ResponseEntity.status(HttpStatus.OK).body(goals);
+    }
+
+    @PostMapping("updateGoalStatus")
+    public ResponseEntity<?> updateGoalStatus(HttpServletRequest request, @Valid @RequestBody GoalUpdateDTO goalData) {
+        goalService.updateGoalStatus(goalData.getGoalId(), goalData.getStatus());
+        return ResponseEntity.status(HttpStatus.OK).body(goalData);
     }
 }
