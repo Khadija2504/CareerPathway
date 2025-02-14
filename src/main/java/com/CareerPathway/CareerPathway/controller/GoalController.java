@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/goal")
+@RequestMapping("/api/employee/goal")
 public class GoalController {
     @Autowired
     private GoalService goalService;
