@@ -8,5 +8,6 @@ public interface GoalService {
     EmployeeGoal addGoal(EmployeeGoal goal);
     List<EmployeeGoal> getGoals(Long id);
     EmployeeGoal updateGoalStatus(Long goalId, String status);
+    boolean deleteGoal(Long goalId);
 
 }
