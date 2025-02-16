@@ -63,7 +63,40 @@ public class GoalController {
 
     @PostMapping("deleteGoal")
     public ResponseEntity<?> deleteGoal(HttpServletRequest request, @RequestBody Integer goalId) {
-        goalService.deleteGoal(goalId.longValue());
-        return ResponseEntity.status(HttpStatus.OK).body(new String[]{"Deleted Goal"});
+        boolean isDeleted = goalService.deleteGoal(goalId.longValue());
+        if(isDeleted){
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new String[]{"Deleted Goal"});
+        } else {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new String[]{"Error while deleting Goal"});
+        }
+    }
+
+    @PutMapping("updateGoal/{goalId}")
+    public ResponseEntity<?> updateGoal(HttpServletRequest request, @Valid @RequestBody EmployeeGoalDTO employeeGoalDTO, BindingResult result, @PathVariable Long goalId) {
+        if (result.hasErrors()) {
+            List<String> errors = result.getFieldErrors().stream()
+                    .map(error -> error.getField() + ": " + error.getDefaultMessage())
+                    .collect(Collectors.toList());
+            return ResponseEntity.badRequest().body(errors);
+        }
+        int userId = Integer.parseInt(request.getAttribute("userId").toString());
+        User user = userService.userDetails(userId);
+        EmployeeGoal employeeGoal = goalMapper.toEntity(employeeGoalDTO);
+        employeeGoal.setEmployee(user);
+        boolean updatedGoal = goalService.updateGoal(goalId, employeeGoal);
+        if(updatedGoal){
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new String[]{"Updated Goal"});
+        } else {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new String[]{"Error while updating Goal"});
+        }
+    }
+
+    @GetMapping("getGoal/{goalId}")
+    public ResponseEntity<?> getGoal(@PathVariable Long goalId) {
+        EmployeeGoal goals = goalService.getGoal(goalId);
+        if (goals == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new String[]{"Goal not found"});
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(goals);
     }
 }
