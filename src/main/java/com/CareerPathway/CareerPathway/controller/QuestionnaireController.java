@@ -3,12 +3,14 @@ package com.CareerPathway.CareerPathway.controller;
 import com.CareerPathway.CareerPathway.model.Questionnaire;
 import com.CareerPathway.CareerPathway.model.SkillAssessment;
 import com.CareerPathway.CareerPathway.service.QuestionnaireService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/employee/questionnaires")
@@ -24,10 +26,14 @@ public class QuestionnaireController {
 
     @PostMapping("/submit")
     public ResponseEntity<?> submitQuestionnaireResponses(
-            @RequestParam Long userId,
-            @RequestParam Long skillId,
-            @RequestBody List<String> responses) {
+            @RequestBody Map<String, Object> requestBody,
+            HttpServletRequest request) {
+        int userIdInt = Integer.parseInt(request.getAttribute("userId").toString());
+        long userId = Long.parseLong(String.valueOf(userIdInt));
         try {
+            Long skillId = Long.valueOf(requestBody.get("skillId").toString());
+            List<String> responses = (List<String>) requestBody.get("responses");
+
             SkillAssessment assessment = questionnaireService.submitQuestionnaireResponses(userId, skillId, responses);
             return ResponseEntity.ok(assessment);
         } catch (IllegalArgumentException e) {

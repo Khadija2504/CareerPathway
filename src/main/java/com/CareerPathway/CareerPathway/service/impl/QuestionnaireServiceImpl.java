@@ -1,9 +1,6 @@
 package com.CareerPathway.CareerPathway.service.impl;
 
-import com.CareerPathway.CareerPathway.model.Questionnaire;
-import com.CareerPathway.CareerPathway.model.Skill;
-import com.CareerPathway.CareerPathway.model.SkillAssessment;
-import com.CareerPathway.CareerPathway.model.User;
+import com.CareerPathway.CareerPathway.model.*;
 import com.CareerPathway.CareerPathway.repository.QuestionnaireRepository;
 import com.CareerPathway.CareerPathway.repository.SkillAssessmentRepository;
 import com.CareerPathway.CareerPathway.service.QuestionnaireService;
@@ -11,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -33,12 +31,30 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
         }
 
         int score = calculateScore(questionnaires, responses);
+        List<String> strengths = new ArrayList<>();
+        List<String> weaknesses = new ArrayList<>();
+        List<String> skillGaps = new ArrayList<>();
+
+        for (int i = 0; i < questionnaires.size(); i++) {
+            String correctAnswer = questionnaires.get(i).getCorrectAnswer();
+            String userResponse = responses.get(i);
+
+            if (correctAnswer.equals(userResponse)) {
+                strengths.add(questionnaires.get(i).getQuestionText());
+            } else {
+                weaknesses.add(questionnaires.get(i).getQuestionText());
+                skillGaps.add(questionnaires.get(i).getQuestionText());
+            }
+        }
 
         SkillAssessment assessment = SkillAssessment.builder()
                 .user(User.builder().id(userId).build())
                 .skill(Skill.builder().id(skillId).build())
                 .score(score)
                 .assessmentDate(LocalDateTime.now())
+                .strengths(strengths)
+                .weaknesses(weaknesses)
+                .skillGaps(skillGaps)
                 .build();
 
         return skillAssessmentRepository.save(assessment);
@@ -58,15 +74,5 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
         }
 
         return (int) ((correctAnswers / (double) totalQuestions) * 100);
-    }
-
-    private String classifySkillLevel(int score) {
-        if (score >= 90) {
-            return "Advanced";
-        } else if (score >= 70) {
-            return "Intermediate";
-        } else {
-            return "Beginner";
-        }
     }
 }

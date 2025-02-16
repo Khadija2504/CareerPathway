@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Data
@@ -32,4 +33,19 @@ public class SkillAssessment {
     private Integer score;
 
     private LocalDateTime assessmentDate = LocalDateTime.now();
+
+    @ElementCollection
+    @CollectionTable(name = "strengths", joinColumns = @JoinColumn(name = "assessment_id"))
+    @Column(name = "strength")
+    private List<String> strengths;
+
+    @ElementCollection
+    @CollectionTable(name = "weaknesses", joinColumns = @JoinColumn(name = "assessment_id"))
+    @Column(name = "weakness")
+    private List<String> weaknesses;
+
+    @ElementCollection
+    @CollectionTable(name = "skill_gaps", joinColumns = @JoinColumn(name = "assessment_id"))
+    @Column(name = "skill_gap")
+    private List<String> skillGaps;
 }
