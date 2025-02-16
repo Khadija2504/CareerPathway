@@ -60,4 +60,10 @@ public class GoalController {
         goalService.updateGoalStatus(goalData.getGoalId(), goalData.getStatus());
         return ResponseEntity.status(HttpStatus.OK).body(goalData);
     }
+
+    @PostMapping("deleteGoal")
+    public ResponseEntity<?> deleteGoal(HttpServletRequest request, @RequestBody Integer goalId) {
+        goalService.deleteGoal(goalId.longValue());
+        return ResponseEntity.status(HttpStatus.OK).body(new String[]{"Deleted Goal"});
+    }
 }

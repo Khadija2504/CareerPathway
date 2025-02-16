@@ -43,4 +43,15 @@ public class GoalServiceImpl implements GoalService {
             throw new IllegalArgumentException("Goal is not associated with a valid user");
         }
     }
+
+    @Override
+    public boolean deleteGoal(Long goalId) {
+        Optional<EmployeeGoal> goalOpt = goalRepository.findEmployeeGoalById(goalId);
+        if(goalOpt.isPresent()) {
+            EmployeeGoal  goal= goalOpt.get();
+            goalRepository.delete(goal);
+            return true;
+        }
+        return false;
+    }
 }
