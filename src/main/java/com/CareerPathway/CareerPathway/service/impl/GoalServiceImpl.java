@@ -54,4 +54,29 @@ public class GoalServiceImpl implements GoalService {
         }
         return false;
     }
+
+    @Override
+    public boolean updateGoal(Long goalId, EmployeeGoal employeeGoal) {
+        Optional<EmployeeGoal> goalOpt = goalRepository.findEmployeeGoalById(goalId);
+        if(goalOpt.isPresent()) {
+            EmployeeGoal  goal= goalOpt.get();
+            goal.setEmployee(employeeGoal.getEmployee());
+            goal.setGoalDescription(employeeGoal.getGoalDescription());
+            goal.setStatus(employeeGoal.getStatus());
+            goal.setType(employeeGoal.getType());
+            goal.setTargetDate(employeeGoal.getTargetDate());
+            goalRepository.save(goal);
+            return true;
+        }
+        return false;
+    }
+    @Override
+    public EmployeeGoal getGoal(Long id) {
+        Optional<EmployeeGoal> goalOpt = goalRepository.findEmployeeGoalById(id);
+        if(goalOpt.isPresent()) {
+            return goalOpt.get();
+        } else {
+            throw new IllegalArgumentException("Goal not found");
+        }
+    }
 }
