@@ -28,6 +28,12 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(userDetails);
     }
 
+    @GetMapping("/allMentors")
+    public ResponseEntity<?> displayAllMentors() {
+        List<User> userDetails = userService.allMentors();
+        return ResponseEntity.status(HttpStatus.OK).body(userDetails);
+    }
+
     @PutMapping("/updateUserDetails")
     public ResponseEntity<?> updateUserDetails(@RequestBody RegistrationDTO registrationDTO, HttpServletRequest request, BindingResult result) {
         if (result.hasErrors()) {
