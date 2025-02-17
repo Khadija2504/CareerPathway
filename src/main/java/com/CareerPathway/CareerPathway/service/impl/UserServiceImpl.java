@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -101,5 +102,10 @@ private UserRepository userRepository;
         } else {
             throw new RuntimeException("user not found");
         }
+    }
+
+    @Override
+    public List<User> allMentors() {
+        return userRepository.findAllByRole(Role.MENTOR);
     }
 }
