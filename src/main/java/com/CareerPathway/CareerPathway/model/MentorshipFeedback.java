@@ -2,9 +2,15 @@ package com.CareerPathway.CareerPathway.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
+@Entity
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+@Data
 @Table(name = "mentorship_feedbacks")
 public class MentorshipFeedback {
     @Id
