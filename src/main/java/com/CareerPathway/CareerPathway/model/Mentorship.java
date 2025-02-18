@@ -19,11 +19,11 @@ public class Mentorship {
 
     @ManyToOne
     @JoinColumn(name = "mentor_id")
-    private Mentor mentor;
+    private User mentor;
 
     @ManyToOne
     @JoinColumn(name = "mentee_id")
-    private Employee mentee;
+    private User mentee;
 
     private LocalDateTime startDate = LocalDateTime.now();
     private LocalDateTime endDate;
