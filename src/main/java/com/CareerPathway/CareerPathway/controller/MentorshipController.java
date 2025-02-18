@@ -2,7 +2,6 @@ package com.CareerPathway.CareerPathway.controller;
 
 import com.CareerPathway.CareerPathway.dto.MentorshipDTO;
 import com.CareerPathway.CareerPathway.mapper.MentorshipMapper;
-import com.CareerPathway.CareerPathway.model.Employee;
 import com.CareerPathway.CareerPathway.model.Mentorship;
 import com.CareerPathway.CareerPathway.model.User;
 import com.CareerPathway.CareerPathway.model.enums.MentorshipStatus;
@@ -19,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -45,11 +43,24 @@ public class MentorshipController {
         }
         int userId = Integer.parseInt(request.getAttribute("userId").toString());
         User user = userService.userDetails(userId);
+        User mentor = userService.userDetails(mentorshipDTO.getMentorId());
+        System.out.println(mentorshipDTO);
         Mentorship mentorship = mentorshipMapper.toEntity(mentorshipDTO);
         mentorship.setStatus(MentorshipStatus.Active);
         mentorship.setMentee(user);
+        mentorship.setMentor(mentor);
         mentorship.setStartDate(LocalDateTime.now());
         Mentorship savedMentorship = mentorshipService.save(mentorship);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedMentorship);
+    }
+
+    @PostMapping("isMentorshipExist")
+    public ResponseEntity<?> isMentorshipExist(@RequestBody Long mentorId, HttpServletRequest request) {
+        long menteeId = Integer.parseInt(request.getAttribute("userId").toString());
+        User mentee = userService.userDetails(menteeId);
+        User mentor = userService.userDetails(mentorId);
+        boolean isExist = mentorshipService.isMentorshipExist(mentor, mentee);
+        System.out.println(isExist);
+        return ResponseEntity.status(HttpStatus.OK).body(isExist);
     }
 }
