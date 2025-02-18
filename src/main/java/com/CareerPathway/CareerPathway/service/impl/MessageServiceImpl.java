@@ -13,11 +13,13 @@ public class MessageServiceImpl implements MessageService {
     @Autowired
     private MessageRepository messageRepository;
 
+    @Override
     public Message sendMessage(Message message) {
         return messageRepository.save(message);
     }
 
+    @Override
     public List<Message> getMessagesBetweenUsers(Long senderId, Long receiverId) {
-        return messageRepository.findBySenderIdAndReceiverId(senderId, receiverId);
+        return messageRepository.findMessagesBetweenUsers(senderId, receiverId);
     }
 }
