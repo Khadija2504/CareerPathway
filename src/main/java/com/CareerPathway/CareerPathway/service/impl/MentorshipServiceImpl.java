@@ -25,4 +25,9 @@ public class MentorshipServiceImpl implements MentorshipService {
         List<Mentorship> mentorship = mentorshipRepository.findByMentorAndMentee(mentor, mentee);
         return !mentorship.isEmpty();
     }
+
+    @Override
+    public List<Mentorship> getAllMentorships(User mentee) {
+        return mentorshipRepository.findByMentee(mentee);
+    }
 }

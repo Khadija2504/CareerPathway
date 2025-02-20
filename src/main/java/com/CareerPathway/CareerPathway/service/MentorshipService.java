@@ -8,4 +8,5 @@ import java.util.List;
 public interface MentorshipService {
     Mentorship save(Mentorship mentorship);
     boolean isMentorshipExist(User mentor, User mentee);
+    List<Mentorship> getAllMentorships(User mentee);
 }

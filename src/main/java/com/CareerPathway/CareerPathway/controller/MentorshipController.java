@@ -12,10 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -54,7 +51,7 @@ public class MentorshipController {
         return ResponseEntity.status(HttpStatus.CREATED).body(savedMentorship);
     }
 
-    @PostMapping("isMentorshipExist")
+    @PostMapping("/isMentorshipExist")
     public ResponseEntity<?> isMentorshipExist(@RequestBody Long mentorId, HttpServletRequest request) {
         long menteeId = Integer.parseInt(request.getAttribute("userId").toString());
         User mentee = userService.userDetails(menteeId);
@@ -62,5 +59,13 @@ public class MentorshipController {
         boolean isExist = mentorshipService.isMentorshipExist(mentor, mentee);
         System.out.println(isExist);
         return ResponseEntity.status(HttpStatus.OK).body(isExist);
+    }
+
+    @GetMapping("/getAllMentorShips")
+    public ResponseEntity<?> getAllMentorShips(HttpServletRequest request) {
+        long userId = Integer.parseInt(request.getAttribute("userId").toString());
+        User mentee = userService.userDetails(userId);
+        List<Mentorship> mentorships = mentorshipService.getAllMentorships(mentee);
+        return ResponseEntity.status(HttpStatus.OK).body(mentorships);
     }
 }
