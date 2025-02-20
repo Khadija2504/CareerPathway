@@ -7,6 +7,7 @@ import com.CareerPathway.CareerPathway.service.GoalService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -79,4 +80,16 @@ public class GoalServiceImpl implements GoalService {
             throw new IllegalArgumentException("Goal not found");
         }
     }
+
+//    public String reminders(long user_id) {
+//        List<EmployeeGoal> goals = goalRepository.findEmployeeGoalByEmployeeIdAndStatus(user_id, GoalStatus.NOT_STARTED);
+//        for(EmployeeGoal goal : goals) {
+//            if(goal.getTargetDate() <) {
+//                return " " + goal.getGoalDescription();
+//            }
+//        }
+//
+//        return null;
+//
+//    }
 }
