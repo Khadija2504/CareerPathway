@@ -12,4 +12,5 @@ import java.util.List;
 public interface NotificationRepository extends JpaRepository<Notification, Long> {
     List<Notification> findByEmployee(User employee);
     List<Notification> findByEmployeeAndMessage(User employee, String message);
+    List<Notification> findByEmployeeAndRead(User employee, boolean read);
 }
