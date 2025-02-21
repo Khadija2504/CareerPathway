@@ -2,6 +2,7 @@ package com.CareerPathway.CareerPathway.service.impl;
 
 import com.CareerPathway.CareerPathway.model.Mentorship;
 import com.CareerPathway.CareerPathway.model.User;
+import com.CareerPathway.CareerPathway.model.enums.MentorshipStatus;
 import com.CareerPathway.CareerPathway.repository.MentorshipRepository;
 import com.CareerPathway.CareerPathway.service.MentorshipService;
 import io.micrometer.observation.annotation.Observed;
@@ -17,12 +18,13 @@ public class MentorshipServiceImpl implements MentorshipService {
     private MentorshipRepository mentorshipRepository;
     @Override
     public Mentorship save(Mentorship mentorship) {
+        mentorship.setStatus(MentorshipStatus.Pending);
         return mentorshipRepository.save(mentorship);
     }
 
     @Override
     public boolean isMentorshipExist(User mentor, User mentee) {
-        List<Mentorship> mentorship = mentorshipRepository.findByMentorAndMentee(mentor, mentee);
+        List<Mentorship> mentorship = mentorshipRepository.findByMentorAndMenteeAndStatus(mentor, mentee, MentorshipStatus.Pending);
         return !mentorship.isEmpty();
     }
 
