@@ -31,4 +31,14 @@ public class NotificationServiceImpl implements NotificationService {
         }
         return notifications;
     }
+    @Override
+    public List<Notification> readNotifications(User employee){
+        List<Notification> notifications = notificationRepository.findByEmployeeAndRead(employee, false);
+        System.out.println(notifications);
+        for (Notification notification : notifications) {
+            notification.setRead(true);
+            notificationRepository.save(notification);
+        }
+        return notifications;
+    }
 }

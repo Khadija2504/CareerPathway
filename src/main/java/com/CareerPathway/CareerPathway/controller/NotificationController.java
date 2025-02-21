@@ -1,5 +1,6 @@
 package com.CareerPathway.CareerPathway.controller;
 
+import com.CareerPathway.CareerPathway.model.Notification;
 import com.CareerPathway.CareerPathway.model.User;
 import com.CareerPathway.CareerPathway.service.GoalService;
 import com.CareerPathway.CareerPathway.service.NotificationService;
@@ -36,5 +37,13 @@ public class NotificationController {
         User employee = userService.userDetails(user_id);
         List<String> reminders = goalService.reminders(employee);
         return ResponseEntity.status(HttpStatus.OK).body(reminders);
+    }
+
+    @GetMapping("/updateNotifications")
+    public ResponseEntity<?> updateNotifications(HttpServletRequest request) {
+        long user_id = Long.parseLong(request.getAttribute("userId").toString());
+        User employee = userService.userDetails(user_id);
+        List<Notification> notifications = notificationService.readNotifications(employee);
+        return ResponseEntity.status(HttpStatus.OK).body(notifications);
     }
 }
