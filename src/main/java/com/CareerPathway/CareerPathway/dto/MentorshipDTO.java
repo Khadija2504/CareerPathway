@@ -11,5 +11,5 @@ public class MentorshipDTO {
 
     @Pattern(regexp = "ACTIVE|COMPLETED",
             message = "Status must be ACTIVE or COMPLETED")
-    private MentorshipStatus status = MentorshipStatus.Active;
+    private MentorshipStatus status = MentorshipStatus.Pending;
 }
