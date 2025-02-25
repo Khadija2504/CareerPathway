@@ -14,6 +14,7 @@ public class Course {
     private Long id;
     private String title;
     private String description;
-    private String platform;
+    private String type;
+    private String category;
     private String url;
 }
