@@ -39,6 +39,12 @@ public class CourseController {
         return ResponseEntity.status(HttpStatus.CREATED).body(SavedCourse);
     }
 
+    @GetMapping("/getCourseById/{courseId}")
+    public ResponseEntity<?> getCourseById(@PathVariable int courseId) {
+        Course course = courseService.getCourseById(courseId);
+        return ResponseEntity.status(HttpStatus.OK).body(course);
+    }
+
     @PutMapping("/admin/updateCourse/{courseId}")
     public ResponseEntity<?> updateCourse(@RequestBody CourseDTO courseDTO, @PathVariable int courseId) {
         Course course = courseMapper.toEntity(courseDTO);

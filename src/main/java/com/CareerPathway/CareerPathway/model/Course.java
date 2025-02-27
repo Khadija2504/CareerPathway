@@ -4,6 +4,8 @@ import com.CareerPathway.CareerPathway.model.enums.CourseType;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -18,4 +20,5 @@ public class Course {
     private CourseType type;
     private String category;
     private String url;
+    private LocalDate createdDate = LocalDate.now();
 }
