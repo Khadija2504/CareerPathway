@@ -9,4 +9,5 @@ public interface CourseService {
     Course createCourse(Course course);
     Course updateCourse(Course course, long courseId);
     boolean deleteCourse(long courseId);
+    Course getCourseById(long courseId);
 }
