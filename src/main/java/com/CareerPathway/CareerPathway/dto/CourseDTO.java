@@ -1,5 +1,6 @@
 package com.CareerPathway.CareerPathway.dto;
 
+import com.CareerPathway.CareerPathway.model.enums.CourseType;
 import jakarta.validation.constraints.*;
 import lombok.*;
 import org.hibernate.validator.constraints.*;
@@ -17,7 +18,8 @@ public class CourseDTO {
 
     @NotNull(message = "Type cannot be null")
     @Pattern(regexp = "^(Online|Offline|Hybrid)$", message = "Type must be Online, Offline, or Hybrid")
-    private String type;
+    private String typeStr;
+    private CourseType type;
 
     @NotNull(message = "Category cannot be null")
     @Pattern(regexp = "^(Education|Technology|Health|Other)$", message = "Category must be Education, Technology, Health, or Other")
