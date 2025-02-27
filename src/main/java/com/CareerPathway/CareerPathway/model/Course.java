@@ -1,5 +1,6 @@
 package com.CareerPathway.CareerPathway.model;
 
+import com.CareerPathway.CareerPathway.model.enums.CourseType;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -14,7 +15,7 @@ public class Course {
     private Long id;
     private String title;
     private String description;
-    private String type;
+    private CourseType type;
     private String category;
     private String url;
 }

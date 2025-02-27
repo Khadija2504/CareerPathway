@@ -21,4 +21,25 @@ public class CourseServiceImpl implements CourseService {
     public Course createCourse(Course course) {
         return courseRepository.save(course);
     }
+
+    @Override
+    public Course updateCourse(Course course, long courseId){
+        Course oldCourse = courseRepository.findById(courseId).get();
+        oldCourse.setCategory(course.getCategory());
+        oldCourse.setDescription(course.getDescription());
+        oldCourse.setUrl(course.getUrl());
+        oldCourse.setTitle(course.getTitle());
+        oldCourse.setType(course.getType());
+        return courseRepository.save(oldCourse);
+    };
+
+    @Override
+    public boolean deleteCourse(long courseId) {
+        try{
+            courseRepository.deleteById(courseId);
+            return true;
+        } catch (Exception e){
+            return false;
+        }
+    }
 }
