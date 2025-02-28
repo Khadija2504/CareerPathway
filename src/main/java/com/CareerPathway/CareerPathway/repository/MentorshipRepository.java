@@ -10,4 +10,5 @@ import java.util.List;
 public interface MentorshipRepository extends JpaRepository<Mentorship, Long> {
     List<Mentorship> findByMentorAndMenteeAndStatus(User mentor, User mentee, MentorshipStatus status);
     List<Mentorship> findByMentee(User mentee);
+    List<Mentorship> findByMentor(User mentor);
 }

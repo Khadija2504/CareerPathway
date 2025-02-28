@@ -61,11 +61,20 @@ public class MentorshipController {
         return ResponseEntity.status(HttpStatus.OK).body(isExist);
     }
 
-    @GetMapping("/getAllMentorShips")
+    @GetMapping("/employee/getAllEmployeeMentorShips")
     public ResponseEntity<?> getAllMentorShips(HttpServletRequest request) {
         long userId = Integer.parseInt(request.getAttribute("userId").toString());
         User mentee = userService.userDetails(userId);
-        List<Mentorship> mentorships = mentorshipService.getAllMentorships(mentee);
+        List<Mentorship> mentorships = mentorshipService.getAllEmployeeMentorships(mentee);
+        return ResponseEntity.status(HttpStatus.OK).body(mentorships);
+    }
+
+    @GetMapping("/mentor/getAllMentorMentorShips")
+    public ResponseEntity<?> getAllMentorMentorShips(HttpServletRequest request) {
+        long userId = Integer.parseInt(request.getAttribute("userId").toString());
+        User mentor = userService.userDetails(userId);
+        List<Mentorship> mentorships = mentorshipService.getAllMentorMentorships(mentor);
+        System.out.println(mentorships);
         return ResponseEntity.status(HttpStatus.OK).body(mentorships);
     }
 }
