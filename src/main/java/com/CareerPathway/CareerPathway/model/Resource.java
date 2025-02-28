@@ -21,4 +21,5 @@ public class Resource {
     private ResourceType type;
     private String category;
     private String resourceUrl;
+    private String image;
 }
