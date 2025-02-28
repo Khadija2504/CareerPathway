@@ -37,4 +37,11 @@ public class MentorshipServiceImpl implements MentorshipService {
     public List<Mentorship> getAllMentorMentorships(User mentor) {
         return mentorshipRepository.findByMentor(mentor);
     }
+
+    @Override
+    public Mentorship updateMentorshipStatus(MentorshipStatus status, long mentorshipId){
+        Mentorship mentorship = mentorshipRepository.findById(mentorshipId).get();
+        mentorship.setStatus(status);
+        return mentorshipRepository.save(mentorship);
+    }
 }

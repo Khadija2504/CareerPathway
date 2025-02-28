@@ -77,4 +77,11 @@ public class MentorshipController {
         System.out.println(mentorships);
         return ResponseEntity.status(HttpStatus.OK).body(mentorships);
     }
+
+    @PutMapping("/mentor/updateMentorshipStatus/{mentorshipId}")
+    public ResponseEntity<?> updateMentorshipStatus(@RequestBody String statusStr, @PathVariable long mentorshipId) {
+        MentorshipStatus status = MentorshipStatus.valueOf(statusStr);
+        Mentorship mentorship = mentorshipService.updateMentorshipStatus(status, mentorshipId);
+        return ResponseEntity.status(HttpStatus.OK).body(mentorship);
+    }
 }
