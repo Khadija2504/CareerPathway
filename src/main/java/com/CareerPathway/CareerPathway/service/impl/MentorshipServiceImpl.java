@@ -29,7 +29,12 @@ public class MentorshipServiceImpl implements MentorshipService {
     }
 
     @Override
-    public List<Mentorship> getAllMentorships(User mentee) {
+    public List<Mentorship> getAllEmployeeMentorships(User mentee) {
         return mentorshipRepository.findByMentee(mentee);
+    }
+
+    @Override
+    public List<Mentorship> getAllMentorMentorships(User mentor) {
+        return mentorshipRepository.findByMentor(mentor);
     }
 }
