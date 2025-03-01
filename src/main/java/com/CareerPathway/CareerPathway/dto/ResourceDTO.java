@@ -21,4 +21,6 @@ public class ResourceDTO {
 
     @Size(max = 100, message = "Category cannot exceed 100 characters")
     private String category;
+    @NotBlank(message = "Resource image is required")
+    private String image;
 }

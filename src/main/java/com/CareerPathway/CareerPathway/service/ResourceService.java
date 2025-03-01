@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface ResourceService {
     List<Resource> findAll();
+    Resource addResource(Resource resource);
 }
