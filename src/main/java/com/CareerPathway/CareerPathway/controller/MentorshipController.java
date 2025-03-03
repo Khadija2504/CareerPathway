@@ -30,7 +30,7 @@ public class MentorshipController {
     @Autowired
     private UserService userService;
 
-    @PostMapping("/create-mentorship")
+    @PostMapping("/employee/create-mentorship")
     public ResponseEntity<?> createMentorship(@RequestBody MentorshipDTO mentorshipDTO, HttpServletRequest request, BindingResult result) {
         if (result.hasErrors()) {
             List<String> errors = result.getFieldErrors().stream()
