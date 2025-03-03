@@ -8,6 +8,7 @@ import com.CareerPathway.CareerPathway.service.ResourceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -32,7 +33,7 @@ public class ResourceController {
         return ResponseEntity.status(HttpStatus.OK).body(resources);
     }
 
-    @PostMapping("/admin/addResource")
+    @PostMapping(value = "/admin/addResource", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> addResource(
             @RequestParam("title") String title,
             @RequestParam("type") String type,
