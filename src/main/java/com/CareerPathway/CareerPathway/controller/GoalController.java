@@ -48,20 +48,20 @@ public class GoalController {
         return ResponseEntity.status(HttpStatus.CREATED).body(savedGoal);
     }
 
-    @GetMapping("displayEmployeeGoals")
+    @GetMapping("/displayEmployeeGoals")
     public ResponseEntity<?> getAllGoals(HttpServletRequest request) {
         int userId = Integer.parseInt(request.getAttribute("userId").toString());
         List<EmployeeGoal> goals = goalService.getGoals((long) userId);
         return ResponseEntity.status(HttpStatus.OK).body(goals);
     }
 
-    @PostMapping("updateGoalStatus")
+    @PostMapping("/updateGoalStatus")
     public ResponseEntity<?> updateGoalStatus(HttpServletRequest request, @Valid @RequestBody GoalUpdateDTO goalData) {
-        goalService.updateGoalStatus(goalData.getGoalId(), goalData.getStatus());
-        return ResponseEntity.status(HttpStatus.OK).body(goalData);
+        EmployeeGoal updatedGoal = goalService.updateGoalStatus(goalData.getGoalId(), goalData.getStatus());
+        return ResponseEntity.status(HttpStatus.OK).body(updatedGoal);
     }
 
-    @PostMapping("deleteGoal")
+    @PostMapping("/deleteGoal")
     public ResponseEntity<?> deleteGoal(HttpServletRequest request, @RequestBody Integer goalId) {
         boolean isDeleted = goalService.deleteGoal(goalId.longValue());
         if(isDeleted){
@@ -71,7 +71,7 @@ public class GoalController {
         }
     }
 
-    @PutMapping("updateGoal/{goalId}")
+    @PutMapping("/updateGoal/{goalId}")
     public ResponseEntity<?> updateGoal(HttpServletRequest request, @Valid @RequestBody EmployeeGoalDTO employeeGoalDTO, BindingResult result, @PathVariable Long goalId) {
         if (result.hasErrors()) {
             List<String> errors = result.getFieldErrors().stream()
@@ -91,12 +91,18 @@ public class GoalController {
         }
     }
 
-    @GetMapping("getGoal/{goalId}")
+    @GetMapping("/getGoal/{goalId}")
     public ResponseEntity<?> getGoal(@PathVariable Long goalId) {
         EmployeeGoal goals = goalService.getGoal(goalId);
         if (goals == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new String[]{"Goal not found"});
         }
         return ResponseEntity.status(HttpStatus.OK).body(goals);
+    }
+
+    @PostMapping("/GoalSupported/{goalId}")
+    public ResponseEntity<?> isGoalSupported(@PathVariable Long goalId, @RequestBody Boolean goalSupported) {
+        EmployeeGoal goal = goalService.updateEmployeeGoalSupported(goalSupported, goalId);
+        return ResponseEntity.status(HttpStatus.OK).body(goal);
     }
 }

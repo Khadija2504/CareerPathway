@@ -26,5 +26,6 @@ public class EmployeeGoal {
     private String goalDescription;
     private LocalDate targetDate;
     private GoalStatus status;
+    private boolean supported;
     private GoalType type;
 }
