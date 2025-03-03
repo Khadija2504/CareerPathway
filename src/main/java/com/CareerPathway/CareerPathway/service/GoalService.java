@@ -13,5 +13,6 @@ public interface GoalService {
     boolean updateGoal(Long goalId, EmployeeGoal goal);
     EmployeeGoal getGoal(Long id);
     List<String> reminders(User user);
+    EmployeeGoal updateEmployeeGoalSupported(boolean supported, long goalId);
 
 }

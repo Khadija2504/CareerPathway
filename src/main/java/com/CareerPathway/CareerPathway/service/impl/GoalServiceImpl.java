@@ -128,4 +128,11 @@ public class GoalServiceImpl implements GoalService {
         }
         return reminders;
     }
+
+    @Override
+    public EmployeeGoal updateEmployeeGoalSupported(boolean supported, long goalId) {
+        EmployeeGoal goal = getGoal(goalId);
+        goal.setSupported(supported);
+        return goalRepository.save(goal);
+    }
 }
