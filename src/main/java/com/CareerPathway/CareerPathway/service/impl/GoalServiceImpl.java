@@ -135,4 +135,9 @@ public class GoalServiceImpl implements GoalService {
         goal.setSupported(supported);
         return goalRepository.save(goal);
     }
+
+    @Override
+    public List<EmployeeGoal> getAllGoals(){
+        return goalRepository.findAll();
+    }
 }

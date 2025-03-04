@@ -1,9 +1,11 @@
 package com.CareerPathway.CareerPathway.service.impl;
 
 import com.CareerPathway.CareerPathway.model.Mentorship;
+import com.CareerPathway.CareerPathway.model.Notification;
 import com.CareerPathway.CareerPathway.model.User;
 import com.CareerPathway.CareerPathway.model.enums.MentorshipStatus;
 import com.CareerPathway.CareerPathway.repository.MentorshipRepository;
+import com.CareerPathway.CareerPathway.repository.NotificationRepository;
 import com.CareerPathway.CareerPathway.service.MentorshipService;
 import io.micrometer.observation.annotation.Observed;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,7 @@ import java.util.Optional;
 public class MentorshipServiceImpl implements MentorshipService {
     @Autowired
     private MentorshipRepository mentorshipRepository;
+    private NotificationRepository notificationRepository;
     @Override
     public Mentorship save(Mentorship mentorship) {
         mentorship.setStatus(MentorshipStatus.Pending);
@@ -42,6 +45,17 @@ public class MentorshipServiceImpl implements MentorshipService {
     public Mentorship updateMentorshipStatus(MentorshipStatus status, long mentorshipId){
         Mentorship mentorship = mentorshipRepository.findById(mentorshipId).get();
         mentorship.setStatus(status);
+        Notification notification = new Notification();
+        notification.setRead(false);
+        notification.setEmployee(mentorship.getMentee());
+        String message = "";
+        if(status == MentorshipStatus.Completed){
+            message = "Mentor Mr." + mentorship.getMentor().getLastName() + " " + "have been closed this mentorship";
+        } else if(status == MentorshipStatus.Active){
+            message = "Mentor Mr." + mentorship.getMentor().getLastName() + " " + "have been active this mentorship";
+        }
+        notification.setMessage(message);
+        notificationRepository.save(notification);
         return mentorshipRepository.save(mentorship);
     }
 }
