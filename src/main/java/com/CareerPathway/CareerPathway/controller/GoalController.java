@@ -101,8 +101,14 @@ public class GoalController {
     }
 
     @PostMapping("/GoalSupported/{goalId}")
-    public ResponseEntity<?> isGoalSupported(@PathVariable Long goalId, @RequestBody Boolean goalSupported) {
+    public ResponseEntity<?> isGoalSupported(@RequestBody boolean goalSupported, @PathVariable long goalId) {
         EmployeeGoal goal = goalService.updateEmployeeGoalSupported(goalSupported, goalId);
+        return ResponseEntity.status(HttpStatus.OK).body(goal);
+    }
+
+    @GetMapping("/allGoals")
+    public ResponseEntity<?> displayAllGoals() {
+        List<EmployeeGoal> goal = goalService.getAllGoals();
         return ResponseEntity.status(HttpStatus.OK).body(goal);
     }
 }
