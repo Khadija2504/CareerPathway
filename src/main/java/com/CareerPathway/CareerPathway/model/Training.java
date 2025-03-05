@@ -31,11 +31,12 @@ public class Training {
     @NotNull @Positive
     private Integer duration; // -> h
 
-    @NotNull @Positive
-    private Double cost;
+    @NotNull
+    private Level level;
 
-    @NotBlank @Size(max = 50)
-        private Level level;
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
     @ElementCollection
     @CollectionTable(name = "training_skills", joinColumns = @JoinColumn(name = "training_id"))

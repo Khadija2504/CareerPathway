@@ -45,7 +45,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**", "/uploads/**", "/api/mentorship/isMentorshipExist", "/api/notifications/**", "/api/messages/**", "/api/resources/user/**").permitAll()
                         .requestMatchers("/api/courses/admin/**", "/api/resources/admin/**", "/api/employee/goal/GoalSupported/**", "/api/employee/goal/allGoals").hasRole("ADMIN")
-                        .requestMatchers("/api/employee/goal/**", "/api/employee/questionnaires/**", "/api/mentorship/employee/").hasRole("EMPLOYEE")
+                        .requestMatchers("/api/employee/goal/**", "/api/employee/questionnaires/**", "/api/mentorship/employee/**").hasRole("EMPLOYEE")
                         .requestMatchers("/api/user/**", "/api/courses/employee/**", "/api/mentorship/mentor/**", "/api/courses/user/**", "api/courses/**").authenticated()
                         .requestMatchers("/api/mentor/**").hasRole("MENTOR")
                         .anyRequest().authenticated()

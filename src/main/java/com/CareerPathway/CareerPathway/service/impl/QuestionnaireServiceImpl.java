@@ -1,10 +1,14 @@
 package com.CareerPathway.CareerPathway.service.impl;
 
 import com.CareerPathway.CareerPathway.model.*;
+import com.CareerPathway.CareerPathway.model.enums.Level;
 import com.CareerPathway.CareerPathway.repository.QuestionnaireRepository;
 import com.CareerPathway.CareerPathway.repository.SkillAssessmentRepository;
+import com.CareerPathway.CareerPathway.repository.SkillRepository;
+import com.CareerPathway.CareerPathway.repository.TrainingRepository;
 import com.CareerPathway.CareerPathway.service.QuestionnaireService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -14,8 +18,11 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class QuestionnaireServiceImpl implements QuestionnaireService {
-    private final QuestionnaireRepository questionnaireRepository;
-    private final SkillAssessmentRepository skillAssessmentRepository;
+    @Autowired
+    private QuestionnaireRepository questionnaireRepository;
+    @Autowired
+    private SkillAssessmentRepository skillAssessmentRepository;
+
 
     @Override
     public List<Questionnaire> getQuestionnairesBySkillId(Long skillId) {
