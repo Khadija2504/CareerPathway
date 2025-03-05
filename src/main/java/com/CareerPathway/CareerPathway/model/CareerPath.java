@@ -1,28 +1,22 @@
 package com.CareerPathway.CareerPathway.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
-import lombok.*;
-
+import lombok.Data;
 import java.util.List;
 
-@Entity
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
-@Table(name = "career_paths")
+@Entity
 public class CareerPath {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank
-    @Size(max = 255)
+    @Column(nullable = false, length = 255)
     private String name;
 
-    @Size(max = 1000)
+    @Column(length = 1000)
     private String description;
 
-    @OneToMany(mappedBy = "careerPath", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "careerPath", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CareerPathStep> steps;
 }
