@@ -1,7 +1,6 @@
 package com.CareerPathway.CareerPathway.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,17 +17,17 @@ public class CareerPathStep {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank @Size(max = 255)
+    @Column(nullable = false, length = 255)
     private String title;
 
-    @Size(max = 500)
+    @Column(length = 500)
     private String description;
 
-    @ManyToOne
-    @JoinColumn(name = "career_path_id")
-    private CareerPath careerPath;
+    @Column(nullable = false)
+    private Long requiredSkillId;
 
     @ManyToOne
-    @JoinColumn(name = "required_skill_id")
-    private Skill requiredSkill;
+    @JoinColumn(name = "career_path_id", nullable = false)
+    private CareerPath careerPath;
+
 }
