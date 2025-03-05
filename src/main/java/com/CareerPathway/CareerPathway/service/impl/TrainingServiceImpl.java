@@ -5,8 +5,13 @@ import com.CareerPathway.CareerPathway.model.enums.Level;
 import com.CareerPathway.CareerPathway.repository.*;
 import com.CareerPathway.CareerPathway.service.TrainingService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -18,6 +23,12 @@ public class TrainingServiceImpl implements TrainingService {
 
     @Autowired
     private SkillRepository skillRepository;
+    @Autowired
+    private SkillAssessmentRepository skillAssessmentRepository;
+    @Autowired
+    private CourseRepository courseRepository;
+    @Autowired
+    private ResourceRepository resourceRepository;
 
     @Override
     public void generateTrainingProgram(Long userId, Long skillId, List<String> weaknesses, List<String> skillGaps, int score) {
@@ -38,7 +49,8 @@ public class TrainingServiceImpl implements TrainingService {
         String title = generateTrainingTitle(skill.getName(), weaknesses);
         String description = generateTrainingDescription(skill.getName(), weaknesses, skillGaps);
 
-        List<String> uniqueSkillsCovered = new ArrayList<>(skillGaps);
+        List<String> uniqueSkillsCovered = new ArrayList<>();
+        uniqueSkillsCovered.add(skill.getName());
 
         Training training = Training.builder()
                 .title(title)
@@ -48,6 +60,7 @@ public class TrainingServiceImpl implements TrainingService {
                 .level(level)
                 .user(User.builder().id(userId).build())
                 .skillsCovered(uniqueSkillsCovered)
+                .createdDate(LocalDateTime.now())
                 .build();
 
         trainingRepository.save(training);
@@ -103,5 +116,49 @@ public class TrainingServiceImpl implements TrainingService {
 
         return String.format("This training program is designed to improve your %s skills by focusing on the following areas: %s. It will also address the following skill gaps: %s.",
                 skillName, String.join(", ", weaknesses), String.join(", ", skillGaps));
+    }
+
+    @Override
+    public Map<String, Object> getRecommendations(Long userId) {
+        List<SkillAssessment> assessments = skillAssessmentRepository.findByUserId(userId);
+
+        Set<String> skills = assessments.stream()
+                .map(a -> a.getSkill().getName())
+                .collect(Collectors.toSet());
+
+        List<Training> trainingPrograms = trainingRepository.findTop1ByUserIdOrderByCreatedDateDesc(userId);
+        Set<String> skillsCoveredInTraining = trainingPrograms.stream()
+                .flatMap(t -> t.getSkillsCovered().stream())
+                .collect(Collectors.toSet());
+
+        Set<String> targetSkills = new HashSet<>(skills);
+        targetSkills.addAll(skillsCoveredInTraining);
+
+        if (targetSkills.isEmpty()) {
+            targetSkills.add("General");
+        }
+
+        List<Course> courses = courseRepository.findByCategoryIn(new ArrayList<>(targetSkills));
+        List<Resource> resources = resourceRepository.findByCategoryIn(new ArrayList<>(targetSkills));
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("courses", courses);
+        response.put("resources", resources);
+        response.put("trainingPrograms", trainingPrograms);
+        return response;
+    }
+
+    @Override
+    public List<Training> getAdditionalTrainingPrograms(Long userId, int page, int size) {
+        System.out.println("Fetching additional training programs for User ID: " + userId);
+        System.out.println("Page: " + page + ", Size: " + size);
+
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdDate"));
+
+        Page<Training> trainingPage = trainingRepository.findByUser_Id(userId, pageable);
+
+        System.out.println("Fetched " + trainingPage.getNumberOfElements() + " training programs");
+
+        return trainingPage.getContent();
     }
 }

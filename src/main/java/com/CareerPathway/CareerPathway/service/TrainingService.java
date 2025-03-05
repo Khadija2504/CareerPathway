@@ -11,4 +11,6 @@ public interface TrainingService {
     int getTopicDuration(String topic);
     String generateTrainingTitle(String skillName, List<String> weaknesses);
     String generateTrainingDescription(String skillName, List<String> weaknesses, List<String> skillGaps);
+    Map<String, Object> getRecommendations(Long userId);
+    List<Training> getAdditionalTrainingPrograms(Long userId, int page, int size);
 }
