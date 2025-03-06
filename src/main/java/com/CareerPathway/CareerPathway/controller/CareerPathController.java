@@ -18,6 +18,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
@@ -92,7 +93,8 @@ public class CareerPathController {
     }
 
     @PostMapping("/employee/updateStepStatus/{stepId}")
-    public ResponseEntity<?> updateStepStatus(@PathVariable long stepId, @RequestBody boolean done) {
+    public ResponseEntity<?> updateStepStatus(@PathVariable long stepId, @RequestBody Map<String, Boolean> request) {
+        boolean done = request.get("done");
         CareerPathStep updatedCareerPathStep = careerPathService.updateCareerPathStep(done, stepId);
         return ResponseEntity.status(HttpStatus.OK).body(updatedCareerPathStep);
     }

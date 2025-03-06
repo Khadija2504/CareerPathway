@@ -46,7 +46,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/auth/**", "/uploads/**", "/api/mentorship/isMentorshipExist", "/api/notifications/**", "/api/messages/**", "/api/resources/user/**").permitAll()
                         .requestMatchers("/api/courses/admin/**", "/api/resources/admin/**", "/api/employee/goal/GoalSupported/**", "/api/employee/goal/allGoals", "/api/careerPath/admin/**").hasRole("ADMIN")
                         .requestMatchers("/api/employee/goal/**", "/api/employee/questionnaires/**", "/api/mentorship/employee/**", "/api/training/**", "/api/careerPath/employee/**").hasRole("EMPLOYEE")
-                        .requestMatchers("/api/user/**", "/api/courses/employee/**", "/api/mentorship/mentor/**", "/api/resources/user/**", "api/courses/**").authenticated()
+                        .requestMatchers("/api/user/**", "/api/courses/employee/**", "/api/mentorship/mentor/**", "/api/resources/user/**", "/api/courses/**").authenticated()
                         .requestMatchers("/api/mentor/**").hasRole("MENTOR")
                         .anyRequest().authenticated()
                 )
