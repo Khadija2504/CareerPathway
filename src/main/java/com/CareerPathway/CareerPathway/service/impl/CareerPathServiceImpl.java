@@ -4,11 +4,11 @@ import com.CareerPathway.CareerPathway.model.CareerPath;
 import com.CareerPathway.CareerPathway.model.CareerPathStep;
 import com.CareerPathway.CareerPathway.model.User;
 import com.CareerPathway.CareerPathway.repository.CareerPathRepository;
+import com.CareerPathway.CareerPathway.repository.CareerPathStepRepository;
 import com.CareerPathway.CareerPathway.service.CareerPathService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,6 +16,8 @@ import java.util.Optional;
 public class CareerPathServiceImpl implements CareerPathService {
     @Autowired
     private CareerPathRepository careerPathRepository;
+    @Autowired
+    private CareerPathStepRepository careerPathStepRepository;
     @Override
     public CareerPath createCareerPath(CareerPath careerPath) {
         return careerPathRepository.save(careerPath);
@@ -65,5 +67,12 @@ public class CareerPathServiceImpl implements CareerPathService {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public CareerPathStep updateCareerPathStep(boolean done, long stepId){
+        CareerPathStep careerPathStep = careerPathStepRepository.findById(stepId).get();
+        careerPathStep.setDone(done);
+        return careerPathStepRepository.save(careerPathStep);
     }
 }
