@@ -4,6 +4,7 @@ import com.CareerPathway.CareerPathway.dto.CareerPathDTO;
 import com.CareerPathway.CareerPathway.mapper.CareerPathMapper;
 import com.CareerPathway.CareerPathway.mapper.CareerPathStepMapper;
 import com.CareerPathway.CareerPathway.model.CareerPath;
+import com.CareerPathway.CareerPathway.model.CareerPathStep;
 import com.CareerPathway.CareerPathway.model.User;
 import com.CareerPathway.CareerPathway.repository.CareerPathRepository;
 import com.CareerPathway.CareerPathway.service.CareerPathService;
@@ -88,5 +89,11 @@ public class CareerPathController {
     public ResponseEntity<?> deleteCareerPath(@PathVariable long careerId) {
         boolean deletedCareerPath = careerPathService.deleteCareerPathById(careerId);
         return ResponseEntity.status(HttpStatus.OK).body(deletedCareerPath);
+    }
+
+    @PostMapping("/employee/updateStepStatus/{stepId}")
+    public ResponseEntity<?> updateStepStatus(@PathVariable long stepId, @RequestBody boolean done) {
+        CareerPathStep updatedCareerPathStep = careerPathService.updateCareerPathStep(done, stepId);
+        return ResponseEntity.status(HttpStatus.OK).body(updatedCareerPathStep);
     }
 }
