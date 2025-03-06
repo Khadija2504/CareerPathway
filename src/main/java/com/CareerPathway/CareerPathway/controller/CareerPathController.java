@@ -5,6 +5,7 @@ import com.CareerPathway.CareerPathway.mapper.CareerPathMapper;
 import com.CareerPathway.CareerPathway.mapper.CareerPathStepMapper;
 import com.CareerPathway.CareerPathway.model.CareerPath;
 import com.CareerPathway.CareerPathway.model.User;
+import com.CareerPathway.CareerPathway.repository.CareerPathRepository;
 import com.CareerPathway.CareerPathway.service.CareerPathService;
 import com.CareerPathway.CareerPathway.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -28,6 +29,8 @@ public class CareerPathController {
     private CareerPathMapper careerPathMapper;
     @Autowired
     private UserService userService;
+    @Autowired
+    private CareerPathRepository careerPathRepository;
 
     @PostMapping("/admin/create-careerPath")
     public ResponseEntity<?> createCareerPath(@Valid @RequestBody CareerPathDTO careerPathDTO, BindingResult result) {
@@ -53,9 +56,31 @@ public class CareerPathController {
 
     @GetMapping("/employee/getAllCareerPaths")
     public ResponseEntity<?> getAllCareerPathsByEmployee(HttpServletRequest request) {
-        long employeeId = Long.parseLong(request.getParameter("employeeId"));
+        long employeeId = Integer.parseInt(request.getAttribute("userId").toString());
         User employee = userService.findById(employeeId).get();
         List<CareerPath> careerPaths = careerPathService.getCareerPathsByEmployee(employee);
         return ResponseEntity.status(HttpStatus.OK).body(careerPaths);
+    }
+
+    @PutMapping("/admin/updateCareerPath/{careerPathId}")
+    public ResponseEntity<?> updateCareerPath(@Valid @RequestBody CareerPathDTO careerPathDTO, BindingResult result, @PathVariable long careerPathId) {
+        if (result.hasErrors()) {
+            List<String> errors = result.getFieldErrors().stream()
+                    .map(error -> error.getField() + ": " + error.getDefaultMessage())
+                    .collect(Collectors.toList());
+            return ResponseEntity.badRequest().body(errors);
+        }
+        CareerPath careerPath = careerPathMapper.toEntity(careerPathDTO);
+        User employee = userService.findById(careerPathDTO.getEmployeeId()).orElseThrow(() -> new RuntimeException("Employee not found"));
+        careerPath.setEmployee(employee);
+
+        CareerPath updatedCareerPath = careerPathService.updateCareerPath(careerPath, careerPathId);
+        return ResponseEntity.status(HttpStatus.OK).body(updatedCareerPath);
+    }
+
+    @GetMapping("/admin/getCareerPath/{careerId}")
+    public ResponseEntity<?> getCareerPath(@PathVariable long careerId) {
+        CareerPath careerPath = careerPathService.getCareerPathById(careerId);
+        return ResponseEntity.status(HttpStatus.OK).body(careerPath);
     }
 }
