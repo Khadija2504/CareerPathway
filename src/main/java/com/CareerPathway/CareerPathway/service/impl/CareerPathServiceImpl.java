@@ -7,8 +7,8 @@ import com.CareerPathway.CareerPathway.repository.CareerPathRepository;
 import com.CareerPathway.CareerPathway.service.CareerPathService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 
@@ -55,5 +55,15 @@ public class CareerPathServiceImpl implements CareerPathService {
     public CareerPath getCareerPathById(long id) {
         Optional<CareerPath> careerPath = careerPathRepository.findById(id);
         return careerPath.orElse(null);
+    }
+
+    @Override
+    public boolean deleteCareerPathById(long id) {
+        Optional<CareerPath> careerPath = careerPathRepository.findById(id);
+        if(careerPath.isPresent()) {
+            careerPathRepository.delete(careerPath.get());
+            return true;
+        }
+        return false;
     }
 }

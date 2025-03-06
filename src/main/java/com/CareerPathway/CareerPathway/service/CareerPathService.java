@@ -11,4 +11,5 @@ public interface CareerPathService {
     List<CareerPath> getAllCareerPaths();
     CareerPath updateCareerPath(CareerPath careerPath, long careerPathId);
     CareerPath getCareerPathById(long id);
+    boolean deleteCareerPathById(long id);
 }
