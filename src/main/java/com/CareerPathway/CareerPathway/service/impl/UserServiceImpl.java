@@ -108,4 +108,15 @@ private UserRepository userRepository;
     public List<User> allMentors() {
         return userRepository.findAllByRole(Role.MENTOR);
     }
+
+    @Override
+    public List<User> allEmployees() {
+        return userRepository.findAllByRole(Role.EMPLOYEE);
+    }
+
+    @Override
+    public Optional<User> findById(long id) {
+        return userRepository.findById(id);
+    }
+
 }

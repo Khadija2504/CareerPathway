@@ -50,4 +50,10 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
+
+    @GetMapping("/allEmployees")
+    public ResponseEntity<?> displayAllEmployees() {
+        List<User> userDetails = userService.allEmployees();
+        return ResponseEntity.status(HttpStatus.OK).body(userDetails);
+    }
 }

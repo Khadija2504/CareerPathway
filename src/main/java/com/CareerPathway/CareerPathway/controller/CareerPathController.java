@@ -2,8 +2,11 @@ package com.CareerPathway.CareerPathway.controller;
 
 import com.CareerPathway.CareerPathway.dto.CareerPathDTO;
 import com.CareerPathway.CareerPathway.mapper.CareerPathMapper;
+import com.CareerPathway.CareerPathway.mapper.CareerPathStepMapper;
 import com.CareerPathway.CareerPathway.model.CareerPath;
+import com.CareerPathway.CareerPathway.model.User;
 import com.CareerPathway.CareerPathway.service.CareerPathService;
+import com.CareerPathway.CareerPathway.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,6 +25,8 @@ public class CareerPathController {
 
     @Autowired
     private CareerPathMapper careerPathMapper;
+    @Autowired
+    private UserService userService;
 
     @PostMapping("/admin/create-careerPath")
     public ResponseEntity<?> createCareerPath(@Valid @RequestBody CareerPathDTO careerPathDTO, BindingResult result) {
@@ -33,6 +38,8 @@ public class CareerPathController {
         }
 
         CareerPath careerPath = careerPathMapper.toEntity(careerPathDTO);
+        User employee = userService.findById(careerPathDTO.getEmployeeId()).get();
+        careerPath.setEmployee(employee);
         CareerPath savedCareer = careerPathService.createCareerPath(careerPath);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedCareer);
     }

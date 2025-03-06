@@ -1,5 +1,7 @@
 package com.CareerPathway.CareerPathway.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -26,8 +28,11 @@ public class CareerPathStep {
     @Column(nullable = false)
     private Long requiredSkillId;
 
+    private boolean done;
+
     @ManyToOne
     @JoinColumn(name = "career_path_id", nullable = false)
+    @JsonBackReference
     private CareerPath careerPath;
 
 }
