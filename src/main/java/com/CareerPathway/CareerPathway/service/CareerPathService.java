@@ -9,4 +9,6 @@ public interface CareerPathService {
     CareerPath createCareerPath(CareerPath careerPath);
     List<CareerPath> getCareerPathsByEmployee(User employee);
     List<CareerPath> getAllCareerPaths();
+    CareerPath updateCareerPath(CareerPath careerPath, long careerPathId);
+    CareerPath getCareerPathById(long id);
 }
