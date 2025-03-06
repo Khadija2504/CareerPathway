@@ -83,4 +83,10 @@ public class CareerPathController {
         CareerPath careerPath = careerPathService.getCareerPathById(careerId);
         return ResponseEntity.status(HttpStatus.OK).body(careerPath);
     }
+
+    @GetMapping("/admin/deleteCareerPath/{careerId}")
+    public ResponseEntity<?> deleteCareerPath(@PathVariable long careerId) {
+        boolean deletedCareerPath = careerPathService.deleteCareerPathById(careerId);
+        return ResponseEntity.status(HttpStatus.OK).body(deletedCareerPath);
+    }
 }
