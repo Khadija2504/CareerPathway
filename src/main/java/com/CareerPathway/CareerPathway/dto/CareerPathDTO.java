@@ -17,6 +17,9 @@ public class CareerPathDTO {
     @Size(max = 1000, message = "Description cannot exceed 1000 characters")
     private String description;
 
+    @NotNull(message = "Employee ID is required")
+    private Long employeeId;
+
     private List<CareerPathStepDTO> steps;
 
 }

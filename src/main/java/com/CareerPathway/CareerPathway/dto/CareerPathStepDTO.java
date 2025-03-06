@@ -15,6 +15,8 @@ public class CareerPathStepDTO {
     @NotNull(message = "Career path ID is required")
     private Long careerPathId;
 
+    private boolean done = false;
+
     @NotNull(message = "Required skill ID is required")
     private Long requiredSkillId;
 }
