@@ -7,6 +7,7 @@ import com.CareerPathway.CareerPathway.model.CareerPath;
 import com.CareerPathway.CareerPathway.model.User;
 import com.CareerPathway.CareerPathway.service.CareerPathService;
 import com.CareerPathway.CareerPathway.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -42,5 +43,19 @@ public class CareerPathController {
         careerPath.setEmployee(employee);
         CareerPath savedCareer = careerPathService.createCareerPath(careerPath);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedCareer);
+    }
+
+    @GetMapping("/admin/getAllCareerPaths")
+    public ResponseEntity<?> getAllCareerPaths() {
+        List<CareerPath> careerPaths = careerPathService.getAllCareerPaths();
+        return ResponseEntity.status(HttpStatus.OK).body(careerPaths);
+    }
+
+    @GetMapping("/employee/getAllCareerPaths")
+    public ResponseEntity<?> getAllCareerPathsByEmployee(HttpServletRequest request) {
+        long employeeId = Long.parseLong(request.getParameter("employeeId"));
+        User employee = userService.findById(employeeId).get();
+        List<CareerPath> careerPaths = careerPathService.getCareerPathsByEmployee(employee);
+        return ResponseEntity.status(HttpStatus.OK).body(careerPaths);
     }
 }
