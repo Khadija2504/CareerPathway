@@ -32,12 +32,14 @@ public class MentorshipController {
 
     @PostMapping("/employee/create-mentorship")
     public ResponseEntity<?> createMentorship(@RequestBody MentorshipDTO mentorshipDTO, HttpServletRequest request, BindingResult result) {
+        System.out.println("hello inside create mentorship ");
         if (result.hasErrors()) {
             List<String> errors = result.getFieldErrors().stream()
                     .map(error -> error.getField() + ": " + error.getDefaultMessage())
                     .collect(Collectors.toList());
             return ResponseEntity.badRequest().body(errors);
         }
+        System.out.println("after the error handling");
         int userId = Integer.parseInt(request.getAttribute("userId").toString());
         User user = userService.userDetails(userId);
         User mentor = userService.userDetails(mentorshipDTO.getMentorId());

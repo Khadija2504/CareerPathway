@@ -2,12 +2,12 @@ package com.CareerPathway.CareerPathway.controller;
 
 import com.CareerPathway.CareerPathway.dto.CareerPathDTO;
 import com.CareerPathway.CareerPathway.mapper.CareerPathMapper;
-import com.CareerPathway.CareerPathway.mapper.CareerPathStepMapper;
 import com.CareerPathway.CareerPathway.model.CareerPath;
 import com.CareerPathway.CareerPathway.model.CareerPathStep;
+import com.CareerPathway.CareerPathway.model.Certification;
 import com.CareerPathway.CareerPathway.model.User;
-import com.CareerPathway.CareerPathway.repository.CareerPathRepository;
 import com.CareerPathway.CareerPathway.service.CareerPathService;
+import com.CareerPathway.CareerPathway.service.CertificationService;
 import com.CareerPathway.CareerPathway.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -32,7 +32,7 @@ public class CareerPathController {
     @Autowired
     private UserService userService;
     @Autowired
-    private CareerPathRepository careerPathRepository;
+    private CertificationService certificationService;
 
     @PostMapping("/admin/create-careerPath")
     public ResponseEntity<?> createCareerPath(@Valid @RequestBody CareerPathDTO careerPathDTO, BindingResult result) {
@@ -97,5 +97,27 @@ public class CareerPathController {
         boolean done = request.get("done");
         CareerPathStep updatedCareerPathStep = careerPathService.updateCareerPathStep(done, stepId);
         return ResponseEntity.status(HttpStatus.OK).body(updatedCareerPathStep);
+    }
+
+    @GetMapping("/employee/completeCareerPath/{careerPathId}")
+    public ResponseEntity<?> completeCareerPath(@PathVariable long careerPathId, HttpServletRequest request) {
+        long employeeId = Integer.parseInt(request.getAttribute("userId").toString());
+        User employee = userService.findById(employeeId).orElseThrow(() -> new RuntimeException("Employee not found"));
+        CareerPath careerPath = careerPathService.getCareerPathById(careerPathId);
+        if (careerPath == null || !careerPath.getEmployee().getId().equals(employeeId)) {
+            System.out.println("Career path not found or unauthorized");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Career path not found or unauthorized");
+        }
+        boolean allStepsDone = careerPath.getSteps().stream().allMatch(CareerPathStep::isDone);
+        System.out.println(careerPath);
+        if (!allStepsDone) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Not all steps are completed");
+        }
+
+        careerPath.setDone(true);
+        careerPathService.updateCareerPathStatus(careerPathId);
+
+        Certification certification = certificationService.generateCertification(careerPath, employee);
+        return ResponseEntity.status(HttpStatus.OK).body(certification);
     }
 }

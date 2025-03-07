@@ -15,13 +15,14 @@ import java.util.List;
 public class MessageServiceImpl implements MessageService {
     @Autowired
     private MessageRepository messageRepository;
+    @Autowired
     private NotificationRepository notificationRepository;
 
     @Override
     public Message sendMessage(Message message) {
         Notification notification = new Notification();
         notification.setRead(false);
-        notification.setEmployee(message.getReceiver());
+        notification.setUser(message.getReceiver());
         String msg = "U have new message from mentor Mr." + message.getSender().getLastName();
         notification.setMessage(msg);
         notificationRepository.save(notification);

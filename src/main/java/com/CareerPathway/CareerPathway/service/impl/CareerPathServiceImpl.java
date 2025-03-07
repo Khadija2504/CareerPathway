@@ -75,4 +75,11 @@ public class CareerPathServiceImpl implements CareerPathService {
         careerPathStep.setDone(done);
         return careerPathStepRepository.save(careerPathStep);
     }
+
+    @Override
+    public CareerPath updateCareerPathStatus(long careerPathId){
+        CareerPath careerPath = getCareerPathById(careerPathId);
+        careerPath.setDone(true);
+        return careerPathRepository.save(careerPath);
+    }
 }
