@@ -21,7 +21,7 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Override
     public List<Notification> getNotifications(User employee) {
-        List<Notification> AllNotifications = notificationRepository.findByEmployee(employee);
+        List<Notification> AllNotifications = notificationRepository.findByUser(employee);
         List<Notification> notifications = new ArrayList<>();
         for (Notification notification : AllNotifications) {
             long days = ChronoUnit.DAYS.between(notification.getSentAt(), LocalDateTime.now());
@@ -33,7 +33,7 @@ public class NotificationServiceImpl implements NotificationService {
     }
     @Override
     public List<Notification> readNotifications(User employee){
-        List<Notification> notifications = notificationRepository.findByEmployeeAndRead(employee, false);
+        List<Notification> notifications = notificationRepository.findByUserAndRead(employee, false);
         System.out.println(notifications);
         for (Notification notification : notifications) {
             notification.setRead(true);

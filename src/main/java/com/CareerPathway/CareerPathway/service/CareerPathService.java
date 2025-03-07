@@ -14,4 +14,5 @@ public interface CareerPathService {
     CareerPath getCareerPathById(long id);
     boolean deleteCareerPathById(long id);
     CareerPathStep updateCareerPathStep(boolean done, long stepId);
+    CareerPath updateCareerPathStatus(long careerPathId);
 }

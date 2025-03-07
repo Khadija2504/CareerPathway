@@ -22,8 +22,8 @@ public class Certification {
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "training_id")
-    private Training training;
+    @JoinColumn(name = "career_id")
+    private CareerPath careerPath;
 
     private LocalDateTime certificationDate = LocalDateTime.now();
     private String certificateUrl;

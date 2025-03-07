@@ -113,11 +113,11 @@ public class GoalServiceImpl implements GoalService {
                         goal.getGoalDescription()
                 );
 
-                List<Notification> notifs = notificationRepository.findByEmployeeAndMessage(user, reminderMessage);
+                List<Notification> notifs = notificationRepository.findByUserAndMessage(user, reminderMessage);
                 System.out.println(notifs.size());
                 if (notifs.size() < 2) {
                     Notification notification = new Notification();
-                    notification.setEmployee(user);
+                    notification.setUser(user);
                     notification.setMessage(reminderMessage);
                     notification.setSentAt(LocalDateTime.now());
                     notification.setRead(false);

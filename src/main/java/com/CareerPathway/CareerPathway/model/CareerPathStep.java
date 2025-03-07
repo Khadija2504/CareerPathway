@@ -35,4 +35,13 @@ public class CareerPathStep {
     @JsonBackReference
     private CareerPath careerPath;
 
+    @Override
+    public String toString() {
+        return "CareerPathStep{" +
+                "id=" + id +
+                ", name='" + title + '\'' +
+                ", done=" + done +
+                ", careerPath=" + (careerPath != null ? careerPath.getId() : null) +
+                '}';
+    }
 }

@@ -16,7 +16,8 @@ public class Notification {
     private Long id;
 
     @ManyToOne
-    private User employee;
+    @JoinColumn(name = "user_id")
+    private User user;
 
     private String message;
     private boolean read;

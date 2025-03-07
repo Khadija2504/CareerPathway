@@ -20,6 +20,8 @@ public class CareerPathDTO {
     @NotNull(message = "Employee ID is required")
     private Long employeeId;
 
+    private boolean done = false;
+
     private List<CareerPathStepDTO> steps;
 
 }

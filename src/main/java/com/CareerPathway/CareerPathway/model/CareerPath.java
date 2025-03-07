@@ -26,10 +26,24 @@ public class CareerPath {
     @JsonManagedReference
     private List<CareerPathStep> steps;
 
+    private boolean done;
+
     public void setSteps(List<CareerPathStep> steps) {
         this.steps = steps;
         for (CareerPathStep step : steps) {
             step.setCareerPath(this);
         }
+    }
+
+    @Override
+    public String toString() {
+        return "CareerPath{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", employee=" + (employee != null ? employee.getId() : null) +
+                ", steps=" + (steps != null ? steps.size() : 0) +
+                ", done=" + done +
+                '}';
     }
 }

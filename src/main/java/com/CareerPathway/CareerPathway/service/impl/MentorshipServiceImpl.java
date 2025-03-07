@@ -47,7 +47,7 @@ public class MentorshipServiceImpl implements MentorshipService {
         mentorship.setStatus(status);
         Notification notification = new Notification();
         notification.setRead(false);
-        notification.setEmployee(mentorship.getMentee());
+        notification.setUser(mentorship.getMentee());
         String message = "";
         if(status == MentorshipStatus.Completed){
             message = "Mentor Mr." + mentorship.getMentor().getLastName() + " " + "have been closed this mentorship";
