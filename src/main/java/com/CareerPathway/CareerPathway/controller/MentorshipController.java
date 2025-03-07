@@ -63,11 +63,16 @@ public class MentorshipController {
         return ResponseEntity.status(HttpStatus.OK).body(isExist);
     }
 
-    @GetMapping("/employee/getAllEmployeeMentorShips")
+    @GetMapping("/user/getAllEmployeeMentorShips")
     public ResponseEntity<?> getAllMentorShips(HttpServletRequest request) {
         long userId = Integer.parseInt(request.getAttribute("userId").toString());
-        User mentee = userService.userDetails(userId);
-        List<Mentorship> mentorships = mentorshipService.getAllEmployeeMentorships(mentee);
+        User user = userService.userDetails(userId);
+        List<Mentorship> mentorships = List.of();
+        if (user.getRole().toString().equals("EMPLOYEE")) {
+            mentorships = mentorshipService.getAllEmployeeMentorships(user);
+        } else if(user.getRole().toString().equals("MENTOR")) {
+            mentorships = mentorshipService.getAllMentorMentorships(user);
+        }
         return ResponseEntity.status(HttpStatus.OK).body(mentorships);
     }
 
