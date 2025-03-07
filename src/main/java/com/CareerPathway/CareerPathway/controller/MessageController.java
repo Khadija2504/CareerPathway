@@ -56,7 +56,9 @@ public class MessageController {
     @GetMapping("/between")
     public ResponseEntity<List<Message>> getMessagesBetweenUsers(
             @RequestParam Long receiverId, HttpServletRequest request) {
+        System.out.println(receiverId);
         long senderId = Long.parseLong(request.getAttribute("userId").toString());
+        System.out.println(senderId);
         List<Message> messages = messageService.getMessagesBetweenUsers(senderId, receiverId);
         return ResponseEntity.ok(messages);
     }
