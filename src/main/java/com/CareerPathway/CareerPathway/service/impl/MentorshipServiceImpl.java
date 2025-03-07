@@ -27,7 +27,7 @@ public class MentorshipServiceImpl implements MentorshipService {
 
     @Override
     public boolean isMentorshipExist(User mentor, User mentee) {
-        List<Mentorship> mentorship = mentorshipRepository.findByMentorAndMenteeAndStatus(mentor, mentee, MentorshipStatus.Pending);
+        List<Mentorship> mentorship = mentorshipRepository.findByMentorAndMenteeAndStatus(mentor, mentee, MentorshipStatus.Active);
         return !mentorship.isEmpty();
     }
 
