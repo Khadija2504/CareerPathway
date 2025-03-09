@@ -105,11 +105,9 @@ public class CareerPathController {
         User employee = userService.findById(employeeId).orElseThrow(() -> new RuntimeException("Employee not found"));
         CareerPath careerPath = careerPathService.getCareerPathById(careerPathId);
         if (careerPath == null || !careerPath.getEmployee().getId().equals(employeeId)) {
-            System.out.println("Career path not found or unauthorized");
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Career path not found or unauthorized");
         }
         boolean allStepsDone = careerPath.getSteps().stream().allMatch(CareerPathStep::isDone);
-        System.out.println(careerPath);
         if (!allStepsDone) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Not all steps are completed");
         }

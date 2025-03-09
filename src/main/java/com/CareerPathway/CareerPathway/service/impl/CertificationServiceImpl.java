@@ -5,6 +5,7 @@ import com.CareerPathway.CareerPathway.model.Certification;
 import com.CareerPathway.CareerPathway.model.User;
 import com.CareerPathway.CareerPathway.repository.CertificationRepository;
 import com.CareerPathway.CareerPathway.service.CertificationService;
+import com.CareerPathway.CareerPathway.util.PdfCertificateGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,12 +13,29 @@ import org.springframework.stereotype.Service;
 public class CertificationServiceImpl implements CertificationService {
     @Autowired
     private CertificationRepository certificationRepository;
+
     @Override
     public Certification generateCertification(CareerPath careerPath, User employee) {
+        String certificateFileName = "certificate_" + careerPath.getName().replace(" ", "_") + "_" + careerPath.getId() + "_" + employee.getId() + ".pdf";
+        String certificatePath = "src/main/resources/static/certificates/" + certificateFileName;
+
+        try {
+            PdfCertificateGenerator.generateCertificate(
+                    employee.getFirstName(),
+                    employee.getLastName(),
+                    careerPath.getName(),
+                    certificatePath
+            );
+
+            System.out.println("Certification generated successfully" + " " + employee.getFirstName());
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to generate certificate", e);
+        }
+
         Certification certification = Certification.builder()
                 .user(employee)
                 .careerPath(careerPath)
-                .certificateUrl("/certificates/career.pdf")
+                .certificateUrl("/certificates/" + certificateFileName)
                 .build();
         return certificationRepository.save(certification);
     }
