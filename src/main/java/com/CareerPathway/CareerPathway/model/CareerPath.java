@@ -26,6 +26,10 @@ public class CareerPath {
     @JsonManagedReference
     private List<CareerPathStep> steps;
 
+    @OneToOne(mappedBy = "careerPath", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference
+    private Certification certification;
+
     private boolean done;
 
     public void setSteps(List<CareerPathStep> steps) {
