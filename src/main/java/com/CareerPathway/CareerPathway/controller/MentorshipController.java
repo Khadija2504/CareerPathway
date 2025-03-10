@@ -1,10 +1,14 @@
 package com.CareerPathway.CareerPathway.controller;
 
 import com.CareerPathway.CareerPathway.dto.MentorshipDTO;
+import com.CareerPathway.CareerPathway.dto.MentorshipFeedbackDTO;
+import com.CareerPathway.CareerPathway.mapper.MentorshipFeedBackMapper;
 import com.CareerPathway.CareerPathway.mapper.MentorshipMapper;
 import com.CareerPathway.CareerPathway.model.Mentorship;
+import com.CareerPathway.CareerPathway.model.MentorshipFeedback;
 import com.CareerPathway.CareerPathway.model.User;
 import com.CareerPathway.CareerPathway.model.enums.MentorshipStatus;
+import com.CareerPathway.CareerPathway.service.MentorshipFeedbackService;
 import com.CareerPathway.CareerPathway.service.MentorshipService;
 import com.CareerPathway.CareerPathway.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -29,6 +33,10 @@ public class MentorshipController {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private MentorshipFeedBackMapper mentorshipFeedBackMapper;
+    @Autowired
+    private MentorshipFeedbackService mentorshipFeedbackService;
 
     @PostMapping("/employee/create-mentorship")
     public ResponseEntity<?> createMentorship(@RequestBody MentorshipDTO mentorshipDTO, HttpServletRequest request, BindingResult result) {
@@ -90,5 +98,12 @@ public class MentorshipController {
         MentorshipStatus status = MentorshipStatus.valueOf(statusStr);
         Mentorship mentorship = mentorshipService.updateMentorshipStatus(status, mentorshipId);
         return ResponseEntity.status(HttpStatus.OK).body(mentorship);
+    }
+
+    @PostMapping("/employee/mentorshipFeedback/create")
+    public ResponseEntity<?> createFeedBack(@RequestBody MentorshipFeedbackDTO mentorshipFeedbackDTO) {
+        MentorshipFeedback mentorshipFeedback = mentorshipFeedBackMapper.toEntity(mentorshipFeedbackDTO);
+        MentorshipFeedback savedFeedback = mentorshipFeedbackService.createFeedback(mentorshipFeedback);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedFeedback);
     }
 }
