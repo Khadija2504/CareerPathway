@@ -1,11 +1,14 @@
 package com.CareerPathway.CareerPathway.service.impl;
 
 import com.CareerPathway.CareerPathway.model.Mentorship;
+import com.CareerPathway.CareerPathway.model.MentorshipFeedback;
 import com.CareerPathway.CareerPathway.model.Notification;
 import com.CareerPathway.CareerPathway.model.User;
 import com.CareerPathway.CareerPathway.model.enums.MentorshipStatus;
+import com.CareerPathway.CareerPathway.repository.MentorshipFeedbackRepository;
 import com.CareerPathway.CareerPathway.repository.MentorshipRepository;
 import com.CareerPathway.CareerPathway.repository.NotificationRepository;
+import com.CareerPathway.CareerPathway.service.MentorshipFeedbackService;
 import com.CareerPathway.CareerPathway.service.MentorshipService;
 import io.micrometer.observation.annotation.Observed;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,10 +18,13 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class MentorshipServiceImpl implements MentorshipService {
+public class MentorshipServiceImpl implements MentorshipService, MentorshipFeedbackService {
     @Autowired
     private MentorshipRepository mentorshipRepository;
+    @Autowired
     private NotificationRepository notificationRepository;
+    @Autowired
+    private MentorshipFeedbackRepository mentorshipFeedbackRepository;
     @Override
     public Mentorship save(Mentorship mentorship) {
         mentorship.setStatus(MentorshipStatus.Pending);
@@ -57,5 +63,10 @@ public class MentorshipServiceImpl implements MentorshipService {
         notification.setMessage(message);
         notificationRepository.save(notification);
         return mentorshipRepository.save(mentorship);
+    }
+
+    @Override
+    public MentorshipFeedback createFeedback(MentorshipFeedback feedback) {
+        return mentorshipFeedbackRepository.save(feedback);
     }
 }

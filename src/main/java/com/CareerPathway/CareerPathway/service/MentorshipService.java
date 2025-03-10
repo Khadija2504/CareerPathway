@@ -1,6 +1,7 @@
 package com.CareerPathway.CareerPathway.service;
 
 import com.CareerPathway.CareerPathway.model.Mentorship;
+import com.CareerPathway.CareerPathway.model.MentorshipFeedback;
 import com.CareerPathway.CareerPathway.model.User;
 import com.CareerPathway.CareerPathway.model.enums.MentorshipStatus;
 
