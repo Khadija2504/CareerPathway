@@ -17,7 +17,7 @@ public class CertificationServiceImpl implements CertificationService {
     @Override
     public Certification generateCertification(CareerPath careerPath, User employee) {
         String certificateFileName = "certificate_" + careerPath.getName().replace(" ", "_") + "_" + careerPath.getId() + "_" + employee.getId() + ".pdf";
-        String certificatePath = "src/main/resources/static/certificates/" + certificateFileName;
+        String certificatePath = "uploads/" + certificateFileName;
 
         try {
             PdfCertificateGenerator.generateCertificate(
@@ -27,7 +27,7 @@ public class CertificationServiceImpl implements CertificationService {
                     certificatePath
             );
 
-            System.out.println("Certification generated successfully" + " " + employee.getFirstName());
+            System.out.println("Certification generated successfully: " + certificateFileName);
         } catch (Exception e) {
             throw new RuntimeException("Failed to generate certificate", e);
         }
@@ -35,7 +35,7 @@ public class CertificationServiceImpl implements CertificationService {
         Certification certification = Certification.builder()
                 .user(employee)
                 .careerPath(careerPath)
-                .certificateUrl("/certificates/" + certificateFileName)
+                .certificateUrl("http://localhost:8800/" + certificatePath)
                 .build();
         return certificationRepository.save(certification);
     }

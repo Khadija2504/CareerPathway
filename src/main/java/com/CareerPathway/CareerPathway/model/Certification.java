@@ -1,5 +1,6 @@
 package com.CareerPathway.CareerPathway.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -21,8 +22,9 @@ public class Certification {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "career_id")
+    @JsonBackReference
     private CareerPath careerPath;
 
     private LocalDateTime certificationDate = LocalDateTime.now();
