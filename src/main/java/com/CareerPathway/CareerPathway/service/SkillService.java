@@ -11,4 +11,5 @@ public interface SkillService {
     List<SkillAssessment> getAllEmployeeSkillAssessments(Long userId);
     Skill addSkill(Skill skill);
     Skill updateSkill(Skill skill, Long id);
+    boolean deleteSkill(Long id);
 }
