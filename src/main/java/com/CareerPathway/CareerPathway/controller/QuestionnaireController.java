@@ -1,5 +1,7 @@
 package com.CareerPathway.CareerPathway.controller;
 
+import com.CareerPathway.CareerPathway.dto.QuestionnaireDTO;
+import com.CareerPathway.CareerPathway.mapper.QuestionnaireMapper;
 import com.CareerPathway.CareerPathway.model.Questionnaire;
 import com.CareerPathway.CareerPathway.model.SkillAssessment;
 import com.CareerPathway.CareerPathway.service.QuestionnaireService;
@@ -24,6 +26,8 @@ public class QuestionnaireController {
 
     @Autowired
     private TrainingService trainingService;
+    @Autowired
+    private QuestionnaireMapper questionnaireMapper;
 
     @GetMapping("/skill/{skillId}")
     public ResponseEntity<List<Questionnaire>> getQuestionnairesBySkillId(@PathVariable Long skillId) {
@@ -59,5 +63,12 @@ public class QuestionnaireController {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while processing the request.");
         }
+    }
+
+    @PostMapping("/admin/createQuestionnaire")
+    public ResponseEntity<?> createQuestionnaire(@RequestBody QuestionnaireDTO questionnaireDTO) {
+        Questionnaire questionnaire = questionnaireMapper.toEntity(questionnaireDTO);
+        Questionnaire savedQuestionnaire = questionnaireService.createQuestionnaire(questionnaire);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedQuestionnaire);
     }
 }
