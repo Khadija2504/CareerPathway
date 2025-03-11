@@ -45,4 +45,11 @@ public class SkillController {
         return ResponseEntity.status(HttpStatus.CREATED).body(savedSkill);
     }
 
+    @PutMapping("/admin/updateSkill/{skillId}")
+    public ResponseEntity<?> updateSkill(@RequestBody SkillDTO skillDTO, @PathVariable long skillId) {
+        Skill skill = skillMapper.toEntity(skillDTO);
+        Skill updatedSkill = skillService.updateSkill(skill, skillId);
+        return ResponseEntity.status(HttpStatus.OK).body(updatedSkill);
+    }
+
 }
