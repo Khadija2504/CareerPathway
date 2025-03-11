@@ -52,4 +52,9 @@ public class SkillController {
         return ResponseEntity.status(HttpStatus.OK).body(updatedSkill);
     }
 
+    @DeleteMapping("/admin/deleteSkill/{skillId}")
+    public ResponseEntity<?> deleteSkill(@PathVariable long skillId) {
+        boolean deleted = skillService.deleteSkill(skillId);
+        return ResponseEntity.status(HttpStatus.OK).body(deleted);
+    }
 }

@@ -40,4 +40,14 @@ public class SkillServiceImpl implements SkillService {
         return skillRepository.save(skill);
     }
 
+    @Override
+    public boolean deleteSkill(Long id) {
+        Skill skill = skillRepository.findById(id).get();
+        try {
+            skillRepository.delete(skill);
+            return true;
+        }catch (Exception e){
+            return false;
+        }
+    }
 }
