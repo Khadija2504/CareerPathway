@@ -1,5 +1,7 @@
 package com.CareerPathway.CareerPathway.controller;
 
+import com.CareerPathway.CareerPathway.dto.SkillDTO;
+import com.CareerPathway.CareerPathway.mapper.SkillMapper;
 import com.CareerPathway.CareerPathway.model.EmployeeGoal;
 import com.CareerPathway.CareerPathway.model.Skill;
 import com.CareerPathway.CareerPathway.model.SkillAssessment;
@@ -19,6 +21,8 @@ import java.util.List;
 public class SkillController {
     @Autowired
     private SkillService skillService;
+    @Autowired
+    private SkillMapper skillMapper;
 
     @GetMapping("displaySkills")
     public ResponseEntity<?> getAllSkills() {
@@ -33,4 +37,12 @@ public class SkillController {
         List<SkillAssessment> skillAssessments = skillService.getAllEmployeeSkillAssessments(userId);
         return ResponseEntity.status(HttpStatus.OK).body(skillAssessments);
     }
+
+    @PostMapping("/admin/addSkill")
+    public ResponseEntity<?> addSkill(@RequestBody SkillDTO skillDTO) {
+        Skill skill = skillMapper.toEntity(skillDTO);
+        Skill savedSkill = skillService.addSkill(skill);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedSkill);
+    }
+
 }
