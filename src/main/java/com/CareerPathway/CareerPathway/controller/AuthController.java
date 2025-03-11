@@ -12,11 +12,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -39,7 +41,9 @@ public class AuthController {
     private UserService userService;
 
     @PostMapping("/register")
-    public ResponseEntity<?> registerUser(@RequestBody RegistrationDTO registrationDTO, BindingResult result) {
+    public ResponseEntity<?> registerUser(@RequestPart("user") RegistrationDTO registrationDTO,
+                                          @RequestPart("file") MultipartFile file,
+                                          BindingResult result) {
         if (result.hasErrors()) {
             List<String> errors = result.getFieldErrors().stream()
                     .map(error -> error.getField() + ": " + error.getDefaultMessage())
@@ -47,8 +51,16 @@ public class AuthController {
             return ResponseEntity.badRequest().body(errors);
         }
         try {
+            String fileName = file.getOriginalFilename();
+            String filePath = Paths.get("uploads", fileName).toString();
+            Files.copy(file.getInputStream(), Paths.get(filePath), StandardCopyOption.REPLACE_EXISTING);
+
+            registrationDTO.setImgUrl("http://localhost:8800/uploads/" + fileName);
+
             User user = userService.registerUser(registrationDTO);
             return ResponseEntity.status(HttpStatus.CREATED).body(user);
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to upload image");
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
