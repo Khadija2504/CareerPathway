@@ -25,6 +25,9 @@ public class RegistrationDTO {
     @NotNull(message = "Role is required")
     private Role role;
 
+    @NotNull(message = "image is required")
+    private String imgUrl;
+
     // for employee
     private String department;
     private String jobTitle;

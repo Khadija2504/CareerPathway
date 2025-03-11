@@ -25,6 +25,8 @@ public class User {
     @Size(max = 100)
     private String firstName;
 
+    private String imgUrl;
+
     @NotBlank(message = "Last name is required")
     @Size(max = 100)
     private String lastName;

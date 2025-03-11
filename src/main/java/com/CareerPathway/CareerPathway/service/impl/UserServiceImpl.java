@@ -42,6 +42,7 @@ private UserRepository userRepository;
                     .password(PasswordUtil.hashPassword(registrationDTO.getPassword()))
                     .role(registrationDTO.getRole())
                     .createdAt(LocalDateTime.now())
+                    .imgUrl(registrationDTO.getImgUrl())
                     .department(registrationDTO.getDepartment())
                     .jobTitle(registrationDTO.getJobTitle())
                     .build();
@@ -53,6 +54,7 @@ private UserRepository userRepository;
                     .password(PasswordUtil.hashPassword(registrationDTO.getPassword()))
                     .role(registrationDTO.getRole())
                     .role(registrationDTO.getRole())
+                    .imgUrl(registrationDTO.getImgUrl())
                     .createdAt(LocalDateTime.now())
                     .expertiseArea(registrationDTO.getExpertiseArea())
                     .yearsOfExperience(registrationDTO.getYearsOfExperience())
