@@ -82,4 +82,9 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
 
         return (int) ((correctAnswers / (double) totalQuestions) * 100);
     }
+
+    @Override
+    public Questionnaire createQuestionnaire(Questionnaire questionnaire) {
+        return questionnaireRepository.save(questionnaire);
+    }
 }
