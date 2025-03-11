@@ -37,7 +37,7 @@ public class SkillServiceImpl implements SkillService {
         existingSkill.setName(skill.getName());
         existingSkill.setDescription(skill.getDescription());
         existingSkill.setCategory(skill.getCategory());
-        return skillRepository.save(skill);
+        return skillRepository.save(existingSkill);
     }
 
     @Override
