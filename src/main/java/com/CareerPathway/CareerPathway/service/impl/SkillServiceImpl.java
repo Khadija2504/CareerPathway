@@ -25,4 +25,10 @@ public class SkillServiceImpl implements SkillService {
     public List<SkillAssessment> getAllEmployeeSkillAssessments(Long userId) {
         return skillAssessmentRepository.findByUserId(userId);
     }
+
+    @Override
+    public Skill addSkill(Skill skill) {
+        return skillRepository.save(skill);
+    }
+
 }
