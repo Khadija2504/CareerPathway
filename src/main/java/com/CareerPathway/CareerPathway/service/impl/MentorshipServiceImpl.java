@@ -66,6 +66,11 @@ public class MentorshipServiceImpl implements MentorshipService, MentorshipFeedb
     }
 
     @Override
+    public List<Mentorship> getAllActiveMenteeMentorship(User mentee) {
+        return mentorshipRepository.findByMenteeAndStatus(mentee, MentorshipStatus.Active);
+    }
+
+    @Override
     public MentorshipFeedback createFeedback(MentorshipFeedback feedback) {
         return mentorshipFeedbackRepository.save(feedback);
     }

@@ -106,4 +106,13 @@ public class MentorshipController {
         MentorshipFeedback savedFeedback = mentorshipFeedbackService.createFeedback(mentorshipFeedback);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedFeedback);
     }
+
+    @GetMapping("/employee/getAllActiveMenteeMentorShips")
+    public ResponseEntity<?> getAllActiveMenteeMentorShips(HttpServletRequest request) {
+        long userId = Integer.parseInt(request.getAttribute("userId").toString());
+        User mentee = userService.userDetails(userId);
+        List<Mentorship> mentorships = mentorshipService.getAllActiveMenteeMentorship(mentee);
+        System.out.println(mentorships);
+        return ResponseEntity.status(HttpStatus.OK).body(mentorships);
+    }
 }

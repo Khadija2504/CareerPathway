@@ -13,4 +13,5 @@ public interface MentorshipService {
     List<Mentorship> getAllEmployeeMentorships(User mentee);
     List<Mentorship> getAllMentorMentorships(User mentor);
     Mentorship updateMentorshipStatus(MentorshipStatus status, long mentorshipId);
+    List<Mentorship> getAllActiveMenteeMentorship(User mentee);
 }
