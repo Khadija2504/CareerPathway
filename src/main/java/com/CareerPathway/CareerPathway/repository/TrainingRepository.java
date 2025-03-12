@@ -1,6 +1,7 @@
 package com.CareerPathway.CareerPathway.repository;
 
 import com.CareerPathway.CareerPathway.model.Training;
+import com.CareerPathway.CareerPathway.model.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -16,4 +17,5 @@ public interface TrainingRepository extends JpaRepository<Training, Long> {
     List<Training> findByUserId(long userId, Pageable pageable);
     Page<Training> findByUser_Id(Long userId, Pageable pageable);
     List<Training> findTop1ByUserIdOrderByCreatedDateDesc(Long userId);
+    List<Training> findByUser(User user);
 }
