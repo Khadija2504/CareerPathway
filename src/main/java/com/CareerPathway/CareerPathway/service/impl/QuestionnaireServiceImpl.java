@@ -9,6 +9,7 @@ import com.CareerPathway.CareerPathway.repository.TrainingRepository;
 import com.CareerPathway.CareerPathway.service.QuestionnaireService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -91,5 +92,15 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
     @Override
     public List<Questionnaire> getAllQuestionnaires() {
         return questionnaireRepository.findAll();
+    }
+
+    @Override
+    public boolean deleteQuestionnaire(long questionnaireId) {
+        try{
+            questionnaireRepository.deleteById(questionnaireId);
+            return true;
+        } catch (EmptyResultDataAccessException e) {
+            return false;
+        }
     }
 }
