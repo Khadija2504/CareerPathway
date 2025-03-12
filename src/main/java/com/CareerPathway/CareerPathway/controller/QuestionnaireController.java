@@ -96,4 +96,10 @@ public class QuestionnaireController {
         List<Questionnaire> questionnaires = questionnaireService.getAllQuestionnaires();
         return ResponseEntity.status(HttpStatus.OK).body(questionnaires);
     }
+
+    @GetMapping("/admin/deleteQuestionnaire/{id}")
+    public ResponseEntity<?> deleteQuestionnaire(@PathVariable long id) {
+        boolean deleted = questionnaireService.deleteQuestionnaire(id);
+        return ResponseEntity.status(HttpStatus.OK).body(deleted);
+    }
 }

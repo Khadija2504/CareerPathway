@@ -10,4 +10,5 @@ public interface QuestionnaireService {
     SkillAssessment submitQuestionnaireResponses(Long userId, Long skillId, List<String> responses);
     Questionnaire createQuestionnaire(Questionnaire questionnaire);
     List<Questionnaire> getAllQuestionnaires();
+    boolean deleteQuestionnaire(long questionnaireId);
 }
