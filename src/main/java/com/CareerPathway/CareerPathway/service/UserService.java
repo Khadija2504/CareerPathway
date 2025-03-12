@@ -1,6 +1,9 @@
 package com.CareerPathway.CareerPathway.service;
 
+import com.CareerPathway.CareerPathway.dto.AggregatedResultDTO;
 import com.CareerPathway.CareerPathway.dto.RegistrationDTO;
+import com.CareerPathway.CareerPathway.model.CareerPath;
+import com.CareerPathway.CareerPathway.model.SkillAssessment;
 import com.CareerPathway.CareerPathway.model.User;
 import org.springframework.stereotype.Service;
 
@@ -16,4 +19,7 @@ public interface UserService {
     User updateUserDetails(long id, RegistrationDTO user);
     List<User> allMentors();
     List<User> allEmployees();
+    List<AggregatedResultDTO> calculateAggregatedResults();
+    int calculateSkillAssessmentPercentage(List<SkillAssessment> assessments);
+    int calculateCareerPathProgress(List<CareerPath> careerPaths);
 }
