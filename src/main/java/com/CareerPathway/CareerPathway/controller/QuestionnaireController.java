@@ -3,18 +3,23 @@ package com.CareerPathway.CareerPathway.controller;
 import com.CareerPathway.CareerPathway.dto.QuestionnaireDTO;
 import com.CareerPathway.CareerPathway.mapper.QuestionnaireMapper;
 import com.CareerPathway.CareerPathway.model.Questionnaire;
+import com.CareerPathway.CareerPathway.model.Skill;
 import com.CareerPathway.CareerPathway.model.SkillAssessment;
 import com.CareerPathway.CareerPathway.service.QuestionnaireService;
+import com.CareerPathway.CareerPathway.service.SkillService;
 import com.CareerPathway.CareerPathway.service.TrainingService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/employee/questionnaires")
@@ -28,6 +33,8 @@ public class QuestionnaireController {
     private TrainingService trainingService;
     @Autowired
     private QuestionnaireMapper questionnaireMapper;
+    @Autowired
+    private SkillService skillService;
 
     @GetMapping("/skill/{skillId}")
     public ResponseEntity<List<Questionnaire>> getQuestionnairesBySkillId(@PathVariable Long skillId) {
@@ -66,8 +73,20 @@ public class QuestionnaireController {
     }
 
     @PostMapping("/admin/createQuestionnaire")
-    public ResponseEntity<?> createQuestionnaire(@RequestBody QuestionnaireDTO questionnaireDTO) {
+    public ResponseEntity<?> createQuestionnaire(@Valid @RequestBody QuestionnaireDTO questionnaireDTO, BindingResult result) {
+        if (result.hasErrors()) {
+            List<String> errors = result.getFieldErrors().stream()
+                    .map(error -> error.getField() + ": " + error.getDefaultMessage())
+                    .collect(Collectors.toList());
+            return ResponseEntity.badRequest().body(errors);
+        }
+        System.out.println(questionnaireDTO);
         Questionnaire questionnaire = questionnaireMapper.toEntity(questionnaireDTO);
+        System.out.println(questionnaire);
+        Skill skill = skillService.findSkillById(questionnaireDTO.getSkillId());
+        System.out.println(skill);
+        questionnaire.setSkill(skill);
+        System.out.println(questionnaire);
         Questionnaire savedQuestionnaire = questionnaireService.createQuestionnaire(questionnaire);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedQuestionnaire);
     }

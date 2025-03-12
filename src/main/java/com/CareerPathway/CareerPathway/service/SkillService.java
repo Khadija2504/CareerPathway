@@ -12,4 +12,5 @@ public interface SkillService {
     Skill addSkill(Skill skill);
     Skill updateSkill(Skill skill, Long id);
     boolean deleteSkill(Long id);
+    Skill findSkillById(Long id);
 }

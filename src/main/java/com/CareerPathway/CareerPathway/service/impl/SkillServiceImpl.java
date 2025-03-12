@@ -6,6 +6,7 @@ import com.CareerPathway.CareerPathway.repository.SkillAssessmentRepository;
 import com.CareerPathway.CareerPathway.repository.SkillRepository;
 import com.CareerPathway.CareerPathway.service.SkillService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -49,5 +50,9 @@ public class SkillServiceImpl implements SkillService {
         }catch (Exception e){
             return false;
         }
+    }
+
+    public Skill findSkillById(Long id) {
+        return skillRepository.findSkillById(id);
     }
 }
