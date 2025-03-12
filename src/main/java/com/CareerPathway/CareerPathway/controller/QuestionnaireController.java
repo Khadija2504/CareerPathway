@@ -71,4 +71,10 @@ public class QuestionnaireController {
         Questionnaire savedQuestionnaire = questionnaireService.createQuestionnaire(questionnaire);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedQuestionnaire);
     }
+
+    @GetMapping("/admin/getAllQuestionnaires")
+    public ResponseEntity<List<Questionnaire>> getAllQuestionnaires() {
+        List<Questionnaire> questionnaires = questionnaireService.getAllQuestionnaires();
+        return ResponseEntity.status(HttpStatus.OK).body(questionnaires);
+    }
 }

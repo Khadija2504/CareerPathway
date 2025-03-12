@@ -87,4 +87,9 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
     public Questionnaire createQuestionnaire(Questionnaire questionnaire) {
         return questionnaireRepository.save(questionnaire);
     }
+
+    @Override
+    public List<Questionnaire> getAllQuestionnaires() {
+        return questionnaireRepository.findAll();
+    }
 }
