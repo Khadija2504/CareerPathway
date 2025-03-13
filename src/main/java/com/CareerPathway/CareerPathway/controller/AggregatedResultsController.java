@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -33,6 +34,14 @@ public class AggregatedResultsController {
     @GetMapping("/progress-metrics")
     public ResponseEntity<ProgressMetricsDTO> getProgressMetrics(HttpServletRequest request) {
         long employeeId = Integer.parseInt(request.getAttribute("userId").toString());
+
+        ProgressMetricsDTO metrics = progressService.calculateProgressMetrics(employeeId);
+
+        return ResponseEntity.status(HttpStatus.OK).body(metrics);
+    }
+
+    @GetMapping("/reports/{employeeId}")
+    public ResponseEntity<ProgressMetricsDTO> getReports(@PathVariable long employeeId) {
 
         ProgressMetricsDTO metrics = progressService.calculateProgressMetrics(employeeId);
 
