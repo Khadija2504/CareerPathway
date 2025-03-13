@@ -39,6 +39,14 @@ public class CareerPath {
         }
     }
 
+    public int getTotalSteps() {
+        return this.steps != null ? this.steps.size() : 0;
+    }
+
+    public int getCompletedSteps() {
+        return this.steps != null ? (int) this.steps.stream().filter(CareerPathStep::isDone).count() : 0;
+    }
+
     @Override
     public String toString() {
         return "CareerPath{" +
