@@ -46,4 +46,11 @@ public class NotificationController {
         List<Notification> notifications = notificationService.readNotifications(employee);
         return ResponseEntity.status(HttpStatus.OK).body(notifications);
     }
+
+    @GetMapping("/getUnreadNotifications")
+    public ResponseEntity<?> getUnreadNotifications(HttpServletRequest request) {
+        long user_id = Long.parseLong(request.getAttribute("userId").toString());
+        User employee = userService.userDetails(user_id);
+        return ResponseEntity.ok(notificationService.unreadNotifications(employee));
+    }
 }
