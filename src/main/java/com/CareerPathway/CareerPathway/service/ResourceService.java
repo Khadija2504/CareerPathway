@@ -7,4 +7,5 @@ import java.util.List;
 public interface ResourceService {
     List<Resource> findAll();
     Resource addResource(Resource resource);
+    boolean deleteResource(long resourceId);
 }

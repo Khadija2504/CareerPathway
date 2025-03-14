@@ -23,4 +23,14 @@ public class ResourceServiceImpl implements ResourceService {
     public Resource addResource(Resource resource) {
         return resourceRepository.save(resource);
     }
+
+    @Override
+    public boolean deleteResource(long resourceId) {
+        try{
+            resourceRepository.deleteById(resourceId);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
 }
