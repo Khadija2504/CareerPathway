@@ -63,4 +63,10 @@ public class ResourceController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to upload image");
         }
     }
+
+    @GetMapping("/admin/deleteResource/{resourceId}")
+    public ResponseEntity<?> deleteResource(@PathVariable Long resourceId) {
+        boolean deleted = resourceService.deleteResource(resourceId);
+        return ResponseEntity.status(HttpStatus.OK).body(deleted);
+    }
 }
