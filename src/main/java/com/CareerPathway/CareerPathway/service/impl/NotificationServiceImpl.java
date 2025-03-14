@@ -41,4 +41,19 @@ public class NotificationServiceImpl implements NotificationService {
         }
         return notifications;
     }
+
+    @Override
+    public List<Notification> unreadNotifications(User employee){
+        return notificationRepository.findByUserAndRead(employee, false);
+    }
+
+    @Override
+    public Notification createNotification(String message, User user) {
+        Notification notification = new Notification();
+        notification.setUser(user);
+        notification.setMessage(message);
+        notification.setSentAt(LocalDateTime.now());
+        notification.setRead(false);
+        return notificationRepository.save(notification);
+    }
 }

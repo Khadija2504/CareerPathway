@@ -4,8 +4,10 @@ import com.CareerPathway.CareerPathway.dto.EmployeeGoalDTO;
 import com.CareerPathway.CareerPathway.dto.GoalUpdateDTO;
 import com.CareerPathway.CareerPathway.mapper.GoalMapper;
 import com.CareerPathway.CareerPathway.model.EmployeeGoal;
+import com.CareerPathway.CareerPathway.model.Notification;
 import com.CareerPathway.CareerPathway.model.User;
 import com.CareerPathway.CareerPathway.service.GoalService;
+import com.CareerPathway.CareerPathway.service.NotificationService;
 import com.CareerPathway.CareerPathway.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -28,6 +30,8 @@ public class GoalController {
     private GoalMapper goalMapper;
     @Autowired
     private UserService userService;
+    @Autowired
+    private NotificationService notificationService;
 
     @PostMapping("/addGoal")
     public ResponseEntity<?> addGoal(HttpServletRequest request, @Valid @RequestBody EmployeeGoalDTO employeeGoalDTO, BindingResult result) {
@@ -102,6 +106,14 @@ public class GoalController {
 
     @PostMapping("/GoalSupported/{goalId}")
     public ResponseEntity<?> isGoalSupported(@RequestBody boolean goalSupported, @PathVariable long goalId) {
+        EmployeeGoal goals = goalService.getGoal(goalId);
+        String message = "";
+        if (goalSupported){
+            message = "Your goal have been supported by the admin!";
+        } else {
+            message = "Your goal have been unsupported by the admin!";
+        }
+        notificationService.createNotification(message, goals.getEmployee());
         EmployeeGoal goal = goalService.updateEmployeeGoalSupported(goalSupported, goalId);
         return ResponseEntity.status(HttpStatus.OK).body(goal);
     }

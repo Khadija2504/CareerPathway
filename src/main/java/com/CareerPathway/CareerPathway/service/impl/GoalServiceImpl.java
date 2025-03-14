@@ -115,7 +115,7 @@ public class GoalServiceImpl implements GoalService {
 
                 List<Notification> notifs = notificationRepository.findByUserAndMessage(user, reminderMessage);
                 System.out.println(notifs.size());
-                if (notifs.size() < 2) {
+                if (notifs.size() < 3) {
                     Notification notification = new Notification();
                     notification.setUser(user);
                     notification.setMessage(reminderMessage);

@@ -8,4 +8,6 @@ import java.util.List;
 public interface NotificationService {
     List<Notification> getNotifications(User employee);
     List<Notification> readNotifications(User employee);
+    List<Notification> unreadNotifications(User employee);
+    Notification createNotification(String message, User user);
 }
