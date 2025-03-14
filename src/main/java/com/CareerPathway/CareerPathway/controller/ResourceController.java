@@ -55,7 +55,7 @@ public class ResourceController {
             resource.setType(ResourceType.valueOf(type));
             resource.setCategory(category);
             resource.setResourceUrl(resourceUrl);
-            resource.setImage("http://localhost:8080/uploads/" + imageFileName);
+            resource.setImage("http://localhost:8800/uploads/" + imageFileName);
 
             Resource savedResource = resourceService.addResource(resource);
             return ResponseEntity.status(HttpStatus.CREATED).body(savedResource);
