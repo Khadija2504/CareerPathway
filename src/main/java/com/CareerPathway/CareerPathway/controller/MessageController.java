@@ -49,6 +49,7 @@ public class MessageController {
         message.setSender(sender);
         message.setReceiver(receiver);
         message.setTimestamp(LocalDateTime.now());
+        message.setRead(false);
         Message savedMessage = messageService.sendMessage(message);
         return ResponseEntity.ok(savedMessage);
     }
@@ -61,5 +62,13 @@ public class MessageController {
         System.out.println(senderId);
         List<Message> messages = messageService.getMessagesBetweenUsers(senderId, receiverId);
         return ResponseEntity.ok(messages);
+    }
+
+    @GetMapping("/unread")
+    public ResponseEntity<?> getUnreadMessages(HttpServletRequest request) {
+        long userId = Long.parseLong(request.getAttribute("userId").toString());
+        User user = userService.userDetails(userId);
+        List<Message> unreadMessages = messageService.getUnreadMessages(user);
+        return ResponseEntity.ok(unreadMessages);
     }
 }
