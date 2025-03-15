@@ -28,5 +28,7 @@ public class Message {
     @Column(columnDefinition = "TEXT")
     private String content;
 
+    private boolean read;
+
     private LocalDateTime timestamp;
 }

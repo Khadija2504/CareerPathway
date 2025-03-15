@@ -21,9 +21,13 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Override
     public List<Notification> getNotifications(User employee) {
-        List<Notification> AllNotifications = notificationRepository.findByUser(employee);
+        List<Notification> allNotifications = notificationRepository.findByUser(employee);
         List<Notification> notifications = new ArrayList<>();
-        for (Notification notification : AllNotifications) {
+
+        for (Notification notification : allNotifications) {
+            if (notification.getSentAt() == null) {
+                continue;
+            }
             long days = ChronoUnit.DAYS.between(notification.getSentAt(), LocalDateTime.now());
             if (days <= 3) {
                 notifications.add(notification);
