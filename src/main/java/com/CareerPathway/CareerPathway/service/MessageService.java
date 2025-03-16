@@ -9,4 +9,5 @@ public interface MessageService {
     List<Message> getMessagesBetweenUsers(Long senderId, Long receiverId);
     Message sendMessage(Message message);
     List<Message> getUnreadMessages(User user);
+    List<Message> getUnreadMessagesBetweenUsers(Long senderId, Long receiverId);
 }

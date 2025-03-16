@@ -47,4 +47,11 @@ public class MessageServiceImpl implements MessageService {
     public List<Message> getUnreadMessages(User user) {
         return messageRepository.findByReceiverAndRead(user, false);
     }
+
+    @Override
+    public List<Message> getUnreadMessagesBetweenUsers(Long senderId, Long receiverId) {
+        List<Message> messages = messageRepository.findMessagesBetweenUsersByRead(senderId, receiverId);
+        messageRepository.saveAll(messages);
+        return messages;
+    }
 }
