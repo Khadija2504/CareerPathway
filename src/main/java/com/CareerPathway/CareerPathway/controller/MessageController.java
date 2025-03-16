@@ -71,4 +71,12 @@ public class MessageController {
         List<Message> unreadMessages = messageService.getUnreadMessages(user);
         return ResponseEntity.ok(unreadMessages);
     }
+
+    @GetMapping("/between/unread")
+    public ResponseEntity<List<Message>> getUnreadMessagesBetweenUsers(
+            @RequestParam Long receiverId, HttpServletRequest request) {
+        long senderId = Long.parseLong(request.getAttribute("userId").toString());
+        List<Message> messages = messageService.getUnreadMessagesBetweenUsers(senderId, receiverId);
+        return ResponseEntity.ok(messages);
+    }
 }
