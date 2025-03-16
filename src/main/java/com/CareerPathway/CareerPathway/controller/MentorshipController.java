@@ -115,4 +115,10 @@ public class MentorshipController {
         System.out.println(mentorships);
         return ResponseEntity.status(HttpStatus.OK).body(mentorships);
     }
+
+    @GetMapping("/mentor/getMentorshipFeedbacks/{mentorshipId}")
+    public ResponseEntity<?> getMentorshipFeedbacks(@PathVariable long mentorshipId) {
+        List<MentorshipFeedback> mentorshipFeedbackList = mentorshipFeedbackService.getAllMentorshipFeedbacks(mentorshipId);
+        return ResponseEntity.status(HttpStatus.OK).body(mentorshipFeedbackList);
+    }
 }
