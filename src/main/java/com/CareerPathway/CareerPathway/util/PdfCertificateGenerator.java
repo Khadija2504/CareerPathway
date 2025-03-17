@@ -25,24 +25,20 @@ import java.nio.file.Paths;
 public class PdfCertificateGenerator {
 
     public static String generateCertificate(String employeeFirstName, String employeeLastName, String careerPathName, String outputPath) throws FileNotFoundException, MalformedURLException {
-        // Ensure the directory exists
         File directory = new File(outputPath).getParentFile();
         if (!directory.exists()) {
-            boolean created = directory.mkdirs(); // Create the directory and its parents if they don't exist
+            boolean created = directory.mkdirs();
             if (!created) {
                 throw new RuntimeException("Failed to create directory: " + directory.getAbsolutePath());
             }
         }
 
-        // Create a PDF writer
         PdfWriter writer = new PdfWriter(outputPath);
         PdfDocument pdfDoc = new PdfDocument(writer);
         Document document = new Document(pdfDoc, PageSize.A4.rotate());
 
-        // Add a border to the document
         document.setMargins(50, 50, 50, 50);
 
-        // Add a title
         Text title = new Text("Certificate of Completion")
                 .setFontSize(36)
                 .setBold()
@@ -52,12 +48,10 @@ public class PdfCertificateGenerator {
                 .setMarginBottom(30);
         document.add(titleParagraph);
 
-        // Add a decorative line
         Table line = new Table(1).setWidth(400).setHorizontalAlignment(HorizontalAlignment.CENTER);
         line.addCell(new Cell().setHeight(2).setBackgroundColor(ColorConstants.DARK_GRAY).setBorder(Border.NO_BORDER));
         document.add(line);
 
-        // Add the employee name
         Text nameText = new Text(employeeLastName + " " + employeeFirstName)
                 .setFontSize(28)
                 .setBold()
@@ -68,7 +62,6 @@ public class PdfCertificateGenerator {
                 .setMarginBottom(10);
         document.add(nameParagraph);
 
-        // Add the career path name
         Text careerText = new Text("has successfully completed the " + careerPathName + " career path.")
                 .setFontSize(18)
                 .setFontColor(ColorConstants.BLACK);
@@ -82,7 +75,6 @@ public class PdfCertificateGenerator {
         logo.setHorizontalAlignment(HorizontalAlignment.CENTER);
         document.add(logo);
 
-        // Add a signature line
         Text signatureText = new Text("Signature: ________________________")
                 .setFontSize(14)
                 .setFontColor(ColorConstants.DARK_GRAY);
@@ -91,7 +83,6 @@ public class PdfCertificateGenerator {
                 .setMarginTop(50);
         document.add(signatureParagraph);
 
-        // Close the document
         document.close();
 
         return outputPath;
