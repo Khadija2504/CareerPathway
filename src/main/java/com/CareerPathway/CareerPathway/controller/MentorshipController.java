@@ -103,7 +103,7 @@ public class MentorshipController {
     @PostMapping("/employee/mentorshipFeedback/create")
     public ResponseEntity<?> createFeedBack(@RequestBody MentorshipFeedbackDTO mentorshipFeedbackDTO) {
         MentorshipFeedback mentorshipFeedback = mentorshipFeedBackMapper.toEntity(mentorshipFeedbackDTO);
-        MentorshipFeedback savedFeedback = mentorshipFeedbackService.createFeedback(mentorshipFeedback);
+        MentorshipFeedback savedFeedback = mentorshipFeedbackService.createFeedback(mentorshipFeedback, mentorshipFeedbackDTO.getMentorshipId());
         return ResponseEntity.status(HttpStatus.CREATED).body(savedFeedback);
     }
 
@@ -119,6 +119,7 @@ public class MentorshipController {
     @GetMapping("/mentor/getMentorshipFeedbacks/{mentorshipId}")
     public ResponseEntity<?> getMentorshipFeedbacks(@PathVariable long mentorshipId) {
         List<MentorshipFeedback> mentorshipFeedbackList = mentorshipFeedbackService.getAllMentorshipFeedbacks(mentorshipId);
+        System.out.println(mentorshipFeedbackList);
         return ResponseEntity.status(HttpStatus.OK).body(mentorshipFeedbackList);
     }
 }

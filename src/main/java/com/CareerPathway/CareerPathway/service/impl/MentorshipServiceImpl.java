@@ -71,7 +71,9 @@ public class MentorshipServiceImpl implements MentorshipService, MentorshipFeedb
     }
 
     @Override
-    public MentorshipFeedback createFeedback(MentorshipFeedback feedback) {
+    public MentorshipFeedback createFeedback(MentorshipFeedback feedback, long mentorshipId) {
+        Mentorship mentorship = mentorshipRepository.findById(mentorshipId).get();
+        feedback.setMentorship(mentorship);
         return mentorshipFeedbackRepository.save(feedback);
     }
 
