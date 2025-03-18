@@ -1,16 +1,14 @@
 package com.CareerPathway.CareerPathway.service.impl;
 
 import com.CareerPathway.CareerPathway.model.*;
-import com.CareerPathway.CareerPathway.model.enums.Level;
 import com.CareerPathway.CareerPathway.repository.QuestionnaireRepository;
 import com.CareerPathway.CareerPathway.repository.SkillAssessmentRepository;
-import com.CareerPathway.CareerPathway.repository.SkillRepository;
-import com.CareerPathway.CareerPathway.repository.TrainingRepository;
 import com.CareerPathway.CareerPathway.service.QuestionnaireService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -19,11 +17,8 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class QuestionnaireServiceImpl implements QuestionnaireService {
-    @Autowired
-    private QuestionnaireRepository questionnaireRepository;
-    @Autowired
-    private SkillAssessmentRepository skillAssessmentRepository;
-
+    private final QuestionnaireRepository questionnaireRepository;
+    private final SkillAssessmentRepository skillAssessmentRepository;
 
     @Override
     public List<Questionnaire> getQuestionnairesBySkillId(Long skillId) {
@@ -33,7 +28,9 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
     @Override
     public SkillAssessment submitQuestionnaireResponses(Long userId, Long skillId, List<String> responses) {
         List<Questionnaire> questionnaires = questionnaireRepository.findBySkillId(skillId);
-
+        if (questionnaires.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "No questionnaires found for skill ID: " + skillId);
+        }
         if (responses.size() != questionnaires.size()) {
             throw new IllegalArgumentException("Number of responses does not match the number of questions.");
         }
@@ -65,7 +62,11 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
                 .skillGaps(skillGaps)
                 .build();
 
-        return skillAssessmentRepository.save(assessment);
+        try {
+            return skillAssessmentRepository.save(assessment);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to save skill assessment.", e);
+        }
     }
 
     private int calculateScore(List<Questionnaire> questionnaires, List<String> responses) {
@@ -73,10 +74,7 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
         int correctAnswers = 0;
 
         for (int i = 0; i < totalQuestions; i++) {
-            String correctAnswer = questionnaires.get(i).getCorrectAnswer();
-            String userResponse = responses.get(i);
-
-            if (correctAnswer.equals(userResponse)) {
+            if (questionnaires.get(i).getCorrectAnswer().equals(responses.get(i))) {
                 correctAnswers++;
             }
         }
@@ -96,11 +94,11 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
 
     @Override
     public boolean deleteQuestionnaire(long questionnaireId) {
-        try{
+        try {
             questionnaireRepository.deleteById(questionnaireId);
             return true;
         } catch (EmptyResultDataAccessException e) {
-            return false;
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Questionnaire not found with ID: " + questionnaireId);
         }
     }
 }

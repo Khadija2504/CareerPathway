@@ -29,7 +29,7 @@ public class Training {
     @NotBlank @Size(max = 255)
     private String provider;
 
-    @NotNull @Positive
+    @NotNull
     private Integer duration; // -> h
 
     @NotNull
