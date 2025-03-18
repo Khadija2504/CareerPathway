@@ -20,7 +20,6 @@ public class TrainingDTO {
     private String provider;
 
     @NotNull(message = "Duration is required")
-    @Positive(message = "Duration must be a positive number")
     private Integer duration;
 
     @NotNull(message = "Cost is required")

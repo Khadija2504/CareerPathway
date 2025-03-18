@@ -8,8 +8,8 @@ import java.util.List;
 
 @Data
 @Entity
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
 @Table(name = "questionnaires")
 public class Questionnaire {
@@ -31,4 +31,5 @@ public class Questionnaire {
     @ManyToOne
     @JoinColumn(name = "skill_id", nullable = false)
     private Skill skill;
+
 }
