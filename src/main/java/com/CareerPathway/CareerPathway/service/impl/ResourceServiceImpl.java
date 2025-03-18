@@ -4,7 +4,10 @@ import com.CareerPathway.CareerPathway.model.Resource;
 import com.CareerPathway.CareerPathway.repository.ResourceRepository;
 import com.CareerPathway.CareerPathway.service.ResourceService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -16,21 +19,34 @@ public class ResourceServiceImpl implements ResourceService {
 
     @Override
     public List<Resource> findAll() {
-        return resourceRepository.findAll();
+        List<Resource> resources = resourceRepository.findAll();
+        if (resources.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "No resources found.");
+        }
+        return resources;
     }
 
     @Override
     public Resource addResource(Resource resource) {
-        return resourceRepository.save(resource);
+        try {
+            return resourceRepository.save(resource);
+        } catch (DataIntegrityViolationException e) {
+            throw new RuntimeException("Error saving resource: Data integrity violation.", e);
+        } catch (Exception e) {
+            throw new RuntimeException("Error saving resource.", e);
+        }
     }
 
     @Override
     public boolean deleteResource(long resourceId) {
-        try{
+        if (!resourceRepository.existsById(resourceId)) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Resource with ID " + resourceId + " not found.");
+        }
+        try {
             resourceRepository.deleteById(resourceId);
             return true;
         } catch (Exception e) {
-            return false;
+            throw new RuntimeException("Error deleting resource.", e);
         }
     }
 }
