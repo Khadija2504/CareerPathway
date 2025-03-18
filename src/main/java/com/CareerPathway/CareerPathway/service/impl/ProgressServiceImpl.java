@@ -7,6 +7,7 @@ import com.CareerPathway.CareerPathway.repository.*;
 import com.CareerPathway.CareerPathway.service.ProgressService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -18,11 +19,16 @@ import java.util.stream.Collectors;
 @Slf4j
 public class ProgressServiceImpl implements ProgressService {
 
-    private final UserRepository userRepository;
-    private final SkillAssessmentRepository skillAssessmentRepository;
-    private final CareerPathRepository careerPathRepository;
-    private final TrainingRepository trainingRepository;
-    private final GoalRepository employeeGoalRepository;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private SkillAssessmentRepository skillAssessmentRepository;
+    @Autowired
+    private CareerPathRepository careerPathRepository;
+    @Autowired
+    private TrainingRepository trainingRepository;
+    @Autowired
+    private GoalRepository employeeGoalRepository;
 
     @Override
     public ProgressMetricsDTO calculateProgressMetrics(Long userId) {
