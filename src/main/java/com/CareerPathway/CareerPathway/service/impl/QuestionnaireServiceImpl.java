@@ -1,10 +1,10 @@
 package com.CareerPathway.CareerPathway.service.impl;
 
 import com.CareerPathway.CareerPathway.model.*;
-import com.CareerPathway.CareerPathway.repository.QuestionnaireRepository;
-import com.CareerPathway.CareerPathway.repository.SkillAssessmentRepository;
+import com.CareerPathway.CareerPathway.repository.*;
 import com.CareerPathway.CareerPathway.service.QuestionnaireService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -17,8 +17,16 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class QuestionnaireServiceImpl implements QuestionnaireService {
-    private final QuestionnaireRepository questionnaireRepository;
-    private final SkillAssessmentRepository skillAssessmentRepository;
+    @Autowired
+    private QuestionnaireRepository questionnaireRepository;
+    @Autowired
+    private SkillAssessmentRepository skillAssessmentRepository;
+    @Autowired
+    private NotificationRepository notificationRepository;
+    @Autowired
+    private SkillRepository skillRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     @Override
     public List<Questionnaire> getQuestionnairesBySkillId(Long skillId) {
@@ -28,6 +36,8 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
     @Override
     public SkillAssessment submitQuestionnaireResponses(Long userId, Long skillId, List<String> responses) {
         List<Questionnaire> questionnaires = questionnaireRepository.findBySkillId(skillId);
+        Skill skill = skillRepository.findSkillById(skillId);
+        User user = userRepository.findById(userId).get();
         if (questionnaires.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "No questionnaires found for skill ID: " + skillId);
         }
@@ -62,7 +72,14 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
                 .skillGaps(skillGaps)
                 .build();
 
+        String message = "New training program generated for you based on ur skill assessment " + skill.getName() + "!";
         try {
+            Notification notification = new Notification();
+            notification.setRead(false);
+            notification.setUser(user);
+            notification.setMessage(message);
+            notification.setSentAt(LocalDateTime.now());
+            notificationRepository.save(notification);
             return skillAssessmentRepository.save(assessment);
         } catch (Exception e) {
             throw new RuntimeException("Failed to save skill assessment.", e);

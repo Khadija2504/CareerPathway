@@ -4,7 +4,7 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
-### uploads forlder ###
+### uploads forlder files ###
 uploads/
 
 ### STS ###
