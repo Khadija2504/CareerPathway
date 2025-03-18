@@ -2,9 +2,13 @@ package com.CareerPathway.CareerPathway.dto;
 
 import com.CareerPathway.CareerPathway.model.enums.Role;
 import jakarta.validation.constraints.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class RegistrationDTO {
     @NotBlank(message = "First name is required")
     @Size(max = 100, message = "First name cannot exceed 100 characters")

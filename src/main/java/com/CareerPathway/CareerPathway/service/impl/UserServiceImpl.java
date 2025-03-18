@@ -10,7 +10,9 @@ import com.CareerPathway.CareerPathway.service.UserService;
 import com.CareerPathway.CareerPathway.util.PasswordUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -20,18 +22,18 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
+
     @Autowired
     private UserRepository userRepository;
     @Autowired
     private SkillAssessmentRepository skillAssessmentRepository;
     @Autowired
     private CareerPathRepository careerPathRepository;
-
     @Autowired
     private TrainingRepository trainingRepository;
-
     @Autowired
     private GoalRepository employeeGoalRepository;
+
     @Override
     public Optional<User> findByEmail(String email) {
         return userRepository.findByEmail(email);
@@ -40,7 +42,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User registerUser(RegistrationDTO registrationDTO) {
         if (userRepository.findByEmail(registrationDTO.getEmail()).isPresent()) {
-            throw new RuntimeException("email already registered");
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Email already registered");
         }
 
         User user;
@@ -63,14 +65,13 @@ public class UserServiceImpl implements UserService {
                     .email(registrationDTO.getEmail())
                     .password(PasswordUtil.hashPassword(registrationDTO.getPassword()))
                     .role(registrationDTO.getRole())
-                    .role(registrationDTO.getRole())
                     .imgUrl(registrationDTO.getImgUrl())
                     .createdAt(LocalDateTime.now())
                     .expertiseArea(registrationDTO.getExpertiseArea())
                     .yearsOfExperience(registrationDTO.getYearsOfExperience())
                     .build();
         } else {
-            throw new RuntimeException("invalid role");
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Invalid role");
         }
 
         return userRepository.save(user);
@@ -81,7 +82,7 @@ public class UserServiceImpl implements UserService {
         Optional<User> optionalUser = userRepository.findById(id);
 
         if (optionalUser.isEmpty()) {
-            throw new RuntimeException("User not found");
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "User not found");
         }
 
         User user = optionalUser.get();
@@ -101,7 +102,7 @@ public class UserServiceImpl implements UserService {
             mentor.setExpertiseArea(registrationDTO.getExpertiseArea());
             mentor.setYearsOfExperience(registrationDTO.getYearsOfExperience());
         } else {
-            throw new RuntimeException("Invalid role");
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Invalid role");
         }
 
         return userRepository.save(user);
@@ -109,11 +110,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User userDetails(long id) {
-        if (userRepository.findById(id).isPresent()) {
-            return userRepository.findById(id).orElse(null);
-        } else {
-            throw new RuntimeException("user not found");
-        }
+        return userRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "User not found"));
     }
 
     @Override
@@ -161,6 +158,7 @@ public class UserServiceImpl implements UserService {
 
         return results;
     }
+
     @Override
     public int calculateSkillAssessmentPercentage(List<SkillAssessment> assessments) {
         if (assessments.isEmpty()) return 0;
