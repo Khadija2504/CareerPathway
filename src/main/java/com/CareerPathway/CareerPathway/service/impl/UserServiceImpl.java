@@ -53,7 +53,6 @@ public class UserServiceImpl implements UserService {
                     .email(registrationDTO.getEmail())
                     .password(PasswordUtil.hashPassword(registrationDTO.getPassword()))
                     .role(registrationDTO.getRole())
-                    .createdAt(LocalDateTime.now())
                     .imgUrl(registrationDTO.getImgUrl())
                     .department(registrationDTO.getDepartment())
                     .jobTitle(registrationDTO.getJobTitle())
@@ -66,7 +65,6 @@ public class UserServiceImpl implements UserService {
                     .password(PasswordUtil.hashPassword(registrationDTO.getPassword()))
                     .role(registrationDTO.getRole())
                     .imgUrl(registrationDTO.getImgUrl())
-                    .createdAt(LocalDateTime.now())
                     .expertiseArea(registrationDTO.getExpertiseArea())
                     .yearsOfExperience(registrationDTO.getYearsOfExperience())
                     .build();

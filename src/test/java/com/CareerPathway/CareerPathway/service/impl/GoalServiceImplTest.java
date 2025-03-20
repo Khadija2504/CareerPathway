@@ -52,7 +52,6 @@ class GoalServiceImplTest {
         employee.setLastName("Doe");
         employee.setEmail("john@doe.com");
         employee.setPassword("password");
-        employee.setCreatedAt(LocalDateTime.now());
         return employee;
     }
 

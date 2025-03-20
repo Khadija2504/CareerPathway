@@ -32,7 +32,7 @@ public class SkillAssessment {
     @Min(0) @Max(100)
     private Integer score;
 
-    private LocalDateTime assessmentDate = LocalDateTime.now();
+    private final LocalDateTime assessmentDate = LocalDateTime.now();
 
     @ElementCollection
     @CollectionTable(name = "strengths", joinColumns = @JoinColumn(name = "assessment_id"))

@@ -27,6 +27,6 @@ public class Certification {
     @JsonBackReference
     private CareerPath careerPath;
 
-    private LocalDateTime certificationDate = LocalDateTime.now();
+    private final LocalDateTime certificationDate = LocalDateTime.now();
     private String certificateUrl;
 }
