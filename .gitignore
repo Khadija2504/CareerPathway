@@ -5,7 +5,7 @@ target/
 !**/src/test/**/target/
 
 ### uploads forlder files ###
-uploads/
+uploads
 
 ### STS ###
 .apt_generated
