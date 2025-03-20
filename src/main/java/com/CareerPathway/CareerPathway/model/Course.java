@@ -20,5 +20,5 @@ public class Course {
     private CourseType type;
     private String category;
     private String url;
-    private LocalDate createdDate = LocalDate.now();
+    private final LocalDate createdDate = LocalDate.now();
 }

@@ -70,7 +70,6 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
                 .user(User.builder().id(userId).build())
                 .skill(Skill.builder().id(skillId).build())
                 .score(score)
-                .assessmentDate(LocalDateTime.now())
                 .strengths(strengths)
                 .weaknesses(weaknesses)
                 .skillGaps(skillGaps)

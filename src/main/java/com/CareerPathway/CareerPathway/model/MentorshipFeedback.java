@@ -27,5 +27,5 @@ public class MentorshipFeedback {
     @Min(1) @Max(5)
     private Integer rating;
 
-    private LocalDateTime feedbackDate = LocalDateTime.now();
+    private final LocalDateTime feedbackDate = LocalDateTime.now();
 }

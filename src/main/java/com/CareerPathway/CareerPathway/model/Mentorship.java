@@ -25,7 +25,7 @@ public class Mentorship {
     @JoinColumn(name = "mentee_id")
     private User mentee;
 
-    private LocalDateTime startDate = LocalDateTime.now();
+    private final LocalDateTime startDate = LocalDateTime.now();
     private LocalDateTime endDate;
 
     private MentorshipStatus status;

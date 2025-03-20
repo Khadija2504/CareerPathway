@@ -56,7 +56,6 @@ public class MentorshipController {
         mentorship.setStatus(MentorshipStatus.Active);
         mentorship.setMentee(user);
         mentorship.setMentor(mentor);
-        mentorship.setStartDate(LocalDateTime.now());
         Mentorship savedMentorship = mentorshipService.save(mentorship);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedMentorship);
     }
