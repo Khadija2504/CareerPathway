@@ -1,0 +1,37 @@
+services:
+  CareerPathway:
+    container_name: CareerPathway
+    image: careerpathway/careerpathway
+    build: .
+    ports:
+      - "8800:8800"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/CareerPathway
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=1234567890
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+    depends_on:
+      - postgres
+    networks:
+      - app-network
+
+  postgres:
+    image: postgres:latest
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=CareerPathway
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=1234567890
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  postgres-data:

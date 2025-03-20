@@ -37,12 +37,16 @@ public class QuestionnaireServiceImpl implements QuestionnaireService {
     public SkillAssessment submitQuestionnaireResponses(Long userId, Long skillId, List<String> responses) {
         List<Questionnaire> questionnaires = questionnaireRepository.findBySkillId(skillId);
         Skill skill = skillRepository.findSkillById(skillId);
-        User user = userRepository.findById(userId).get();
+        User user = userRepository.findById(userId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+
         if (questionnaires.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "No questionnaires found for skill ID: " + skillId);
         }
         if (responses.size() != questionnaires.size()) {
             throw new IllegalArgumentException("Number of responses does not match the number of questions.");
+        }
+        if (skill == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Skill not found with ID: " + skillId);
         }
 
         int score = calculateScore(questionnaires, responses);
