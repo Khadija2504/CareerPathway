@@ -1,6 +1,8 @@
 package com.CareerPathway.CareerPathway.service.impl;
 
+import com.CareerPathway.CareerPathway.model.Employee;
 import com.CareerPathway.CareerPathway.model.EmployeeGoal;
+import com.CareerPathway.CareerPathway.model.Notification;
 import com.CareerPathway.CareerPathway.model.User;
 import com.CareerPathway.CareerPathway.model.enums.GoalStatus;
 import com.CareerPathway.CareerPathway.repository.GoalRepository;
@@ -15,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -63,6 +66,14 @@ class GoalServiceImplTest {
         return goal;
     }
 
+    private User createUser() {
+        User user = new User();
+        user.setId(1L);
+        user.setFirstName("John");
+        user.setLastName("Doe");
+        return user;
+    }
+
     @Test
     void addGoal_Success() {
         EmployeeGoal goal = createGoal();
@@ -72,7 +83,7 @@ class GoalServiceImplTest {
 
         assertNotNull(result);
         assertEquals("Learn Java", result.getGoalDescription());
-        assertEquals(1L, result.getEmployee().getId());
+        assertEquals(1L, result.getEmployee().getId()); // Ensure the employee is correctly set
         verify(goalRepository, times(1)).save(goal);
     }
 
@@ -207,4 +218,180 @@ class GoalServiceImplTest {
         assertEquals("Error deleting goal", exception.getReason());
     }
 
+    @Test
+    void updateGoal_Success() {
+        EmployeeGoal goal = createGoal();
+        when(goalRepository.findEmployeeGoalById(1L)).thenReturn(Optional.of(goal));
+        when(goalRepository.save(any(EmployeeGoal.class))).thenReturn(goal);
+
+        boolean result = goalService.updateGoal(1L, goal);
+
+        assertTrue(result);
+        verify(goalRepository, times(1)).findEmployeeGoalById(1L);
+        verify(goalRepository, times(1)).save(goal);
+    }
+
+    @Test
+    void updateGoal_NotFound() {
+        when(goalRepository.findEmployeeGoalById(1L)).thenReturn(Optional.empty());
+
+        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> {
+            goalService.updateGoal(1L, createGoal());
+        });
+
+        assertEquals(HttpStatus.NOT_FOUND, exception.getStatusCode());
+        assertEquals("Goal not found with ID: 1", exception.getReason());
+    }
+
+    @Test
+    void updateGoal_Error() {
+        EmployeeGoal goal = createGoal();
+        when(goalRepository.findEmployeeGoalById(1L)).thenReturn(Optional.of(goal));
+        when(goalRepository.save(any(EmployeeGoal.class))).thenThrow(new RuntimeException("Database error"));
+
+        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> {
+            goalService.updateGoal(1L, goal);
+        });
+
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, exception.getStatusCode());
+        assertEquals("Error updating goal", exception.getReason());
+    }
+
+    @Test
+    void getGoal_Success() {
+        EmployeeGoal goal = createGoal();
+        when(goalRepository.findEmployeeGoalById(1L)).thenReturn(Optional.of(goal));
+
+        EmployeeGoal result = goalService.getGoal(1L);
+
+        assertNotNull(result);
+        assertEquals("Learn Java", result.getGoalDescription());
+        verify(goalRepository, times(1)).findEmployeeGoalById(1L);
+    }
+
+    @Test
+    void getGoal_NotFound() {
+        when(goalRepository.findEmployeeGoalById(1L)).thenReturn(Optional.empty());
+
+        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> {
+            goalService.getGoal(1L);
+        });
+
+        assertEquals(HttpStatus.NOT_FOUND, exception.getStatusCode());
+        assertEquals("Goal not found with ID: 1", exception.getReason());
+    }
+
+    @Test
+    void getGoal_Error() {
+        when(goalRepository.findEmployeeGoalById(1L)).thenThrow(new RuntimeException("Database error"));
+
+        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> {
+            goalService.getGoal(1L);
+        });
+
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, exception.getStatusCode());
+        assertEquals("Error retrieving goal", exception.getReason());
+    }
+
+    @Test
+    void reminders_Success() {
+        User user = createUser();
+        EmployeeGoal goal = createGoal();
+        goal.setTargetDate(LocalDate.now().plusDays(10));
+
+        when(goalRepository.findEmployeeGoalByEmployeeIdAndStatusIn(1L, Arrays.asList(GoalStatus.NOT_STARTED, GoalStatus.IN_PROGRESS)))
+                .thenReturn(Arrays.asList(goal));
+
+        when(notificationRepository.findByUserAndMessage(eq(user), anyString())).thenReturn(List.of());
+
+        List<String> result = goalService.reminders(user);
+
+        assertNotNull(result);
+        assertEquals(1, result.size());
+
+        verify(goalRepository, times(1)).findEmployeeGoalByEmployeeIdAndStatusIn(1L, Arrays.asList(GoalStatus.NOT_STARTED, GoalStatus.IN_PROGRESS));
+        verify(notificationRepository, times(1)).save(any(Notification.class));
+    }
+
+    @Test
+    void reminders_Error() {
+        User user = createUser();
+        when(goalRepository.findEmployeeGoalByEmployeeIdAndStatusIn(1L, Arrays.asList(GoalStatus.NOT_STARTED, GoalStatus.IN_PROGRESS)))
+                .thenThrow(new RuntimeException("Database error"));
+
+        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> {
+            goalService.reminders(user);
+        });
+
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, exception.getStatusCode());
+        assertEquals("Error generating reminders", exception.getReason());
+    }
+
+    @Test
+    void updateEmployeeGoalSupported_Success() {
+        EmployeeGoal goal = createGoal();
+        when(goalRepository.findEmployeeGoalById(1L)).thenReturn(Optional.of(goal));
+        when(goalRepository.save(any(EmployeeGoal.class))).thenReturn(goal);
+
+        EmployeeGoal result = goalService.updateEmployeeGoalSupported(true, 1L);
+
+        assertNotNull(result);
+        assertTrue(result.isSupported());
+        verify(goalRepository, times(1)).findEmployeeGoalById(1L);
+        verify(goalRepository, times(1)).save(goal);
+    }
+
+    @Test
+    void updateEmployeeGoalSupported_NotFound() {
+        when(goalRepository.findEmployeeGoalById(1L)).thenReturn(Optional.empty());
+
+        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> {
+            goalService.updateEmployeeGoalSupported(true, 1L);
+        });
+
+        assertEquals(HttpStatus.NOT_FOUND, exception.getStatusCode());
+        assertEquals("Goal not found with ID: 1", exception.getReason());
+    }
+
+    @Test
+    void updateEmployeeGoalSupported_Error() {
+        EmployeeGoal goal = createGoal();
+        when(goalRepository.findEmployeeGoalById(1L)).thenReturn(Optional.of(goal));
+        when(goalRepository.save(any(EmployeeGoal.class))).thenThrow(new RuntimeException("Database error"));
+
+        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> {
+            goalService.updateEmployeeGoalSupported(true, 1L);
+        });
+
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, exception.getStatusCode());
+        assertEquals("Error updating goal support status", exception.getReason());
+    }
+
+    @Test
+    void getAllGoals_Success() {
+        EmployeeGoal goal1 = createGoal();
+        EmployeeGoal goal2 = createGoal();
+        goal2.setId(2L);
+        goal2.setGoalDescription("Learn Python");
+
+        when(goalRepository.findAll()).thenReturn(Arrays.asList(goal1, goal2));
+
+        List<EmployeeGoal> result = goalService.getAllGoals();
+
+        assertNotNull(result);
+        assertEquals(2, result.size());
+        verify(goalRepository, times(1)).findAll();
+    }
+
+    @Test
+    void getAllGoals_Error() {
+        when(goalRepository.findAll()).thenThrow(new RuntimeException("Database error"));
+
+        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> {
+            goalService.getAllGoals();
+        });
+
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, exception.getStatusCode());
+        assertEquals("Error retrieving all goals", exception.getReason());
+    }
 }
