@@ -2,15 +2,18 @@ package com.CareerPathway.CareerPathway.service.impl;
 
 import com.CareerPathway.CareerPathway.model.CareerPath;
 import com.CareerPathway.CareerPathway.model.CareerPathStep;
+import com.CareerPathway.CareerPathway.model.Notification;
 import com.CareerPathway.CareerPathway.model.User;
 import com.CareerPathway.CareerPathway.repository.CareerPathRepository;
 import com.CareerPathway.CareerPathway.repository.CareerPathStepRepository;
+import com.CareerPathway.CareerPathway.repository.NotificationRepository;
 import com.CareerPathway.CareerPathway.service.CareerPathService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,10 +23,19 @@ public class CareerPathServiceImpl implements CareerPathService {
     private CareerPathRepository careerPathRepository;
     @Autowired
     private CareerPathStepRepository careerPathStepRepository;
+    @Autowired
+    private NotificationRepository notificationRepository;
 
     @Override
     public CareerPath createCareerPath(CareerPath careerPath) {
+        String message = "New career path assigned to u, check ur career paths list now!";
         try {
+            Notification notification = new Notification();
+            notification.setRead(false);
+            notification.setUser(careerPath.getEmployee());
+            notification.setMessage(message);
+            notification.setSentAt(LocalDateTime.now());
+            notificationRepository.save(notification);
             return careerPathRepository.save(careerPath);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error creating career path", e);
@@ -66,6 +78,13 @@ public class CareerPathServiceImpl implements CareerPathService {
                 oldCareerPath.getSteps().add(step);
             }
 
+            String message = "Ur career path " + careerPath.getName() + " have been updated, check ur carer paths list now!";
+            Notification notification = new Notification();
+            notification.setRead(false);
+            notification.setUser(careerPath.getEmployee());
+            notification.setMessage(message);
+            notification.setSentAt(LocalDateTime.now());
+            notificationRepository.save(notification);
             return careerPathRepository.save(oldCareerPath);
         } catch (ResponseStatusException e) {
             throw e;

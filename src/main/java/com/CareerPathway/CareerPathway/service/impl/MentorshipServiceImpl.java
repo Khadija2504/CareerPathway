@@ -15,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,7 +34,15 @@ public class MentorshipServiceImpl implements MentorshipService, MentorshipFeedb
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Mentorship, mentor, and mentee cannot be null");
         }
 
+        String message = "U have new connection request from " + mentorship.getMentee() +", check it in mentorship list now";
+
         try {
+            Notification notification = new Notification();
+            notification.setRead(false);
+            notification.setUser(mentorship.getMentor());
+            notification.setMessage(message);
+            notification.setSentAt(LocalDateTime.now());
+            notificationRepository.save(notification);
             mentorship.setStatus(MentorshipStatus.Pending);
             return mentorshipRepository.save(mentorship);
         } catch (Exception e) {
