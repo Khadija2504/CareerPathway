@@ -76,12 +76,14 @@ class MentorshipServiceImplTest {
     void save_Success() {
         Mentorship mentorship = createMentorship();
         when(mentorshipRepository.save(any(Mentorship.class))).thenReturn(mentorship);
+        when(notificationRepository.save(any(Notification.class))).thenReturn(new Notification());
 
         Mentorship result = mentorshipService.save(mentorship);
 
         assertNotNull(result);
         assertEquals(MentorshipStatus.Pending, result.getStatus());
         verify(mentorshipRepository, times(1)).save(mentorship);
+        verify(notificationRepository, times(1)).save(any(Notification.class));
     }
 
     @Test
@@ -224,6 +226,7 @@ class MentorshipServiceImplTest {
         Mentorship mentorship = createMentorship();
         when(mentorshipRepository.findById(1L)).thenReturn(Optional.of(mentorship));
         when(mentorshipRepository.save(any(Mentorship.class))).thenReturn(mentorship);
+        when(notificationRepository.save(any(Notification.class))).thenReturn(new Notification());
 
         Mentorship result = mentorshipService.updateMentorshipStatus(MentorshipStatus.Active, 1L);
 

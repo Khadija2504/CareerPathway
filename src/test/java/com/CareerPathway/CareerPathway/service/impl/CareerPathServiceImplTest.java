@@ -2,9 +2,11 @@ package com.CareerPathway.CareerPathway.service.impl;
 
 import com.CareerPathway.CareerPathway.model.CareerPath;
 import com.CareerPathway.CareerPathway.model.CareerPathStep;
+import com.CareerPathway.CareerPathway.model.Notification;
 import com.CareerPathway.CareerPathway.model.User;
 import com.CareerPathway.CareerPathway.repository.CareerPathRepository;
 import com.CareerPathway.CareerPathway.repository.CareerPathStepRepository;
+import com.CareerPathway.CareerPathway.repository.NotificationRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -28,6 +30,9 @@ class CareerPathServiceImplTest {
     @Mock
     private CareerPathStepRepository careerPathStepRepository;
 
+    @Mock
+    private NotificationRepository notificationRepository;
+
     @InjectMocks
     private CareerPathServiceImpl careerPathService;
 
@@ -39,12 +44,17 @@ class CareerPathServiceImplTest {
     @Test
     void createCareerPath() {
         CareerPath careerPath = new CareerPath();
+        User employee = new User();
+        careerPath.setEmployee(employee);
+
         when(careerPathRepository.save(any(CareerPath.class))).thenReturn(careerPath);
+        when(notificationRepository.save(any(Notification.class))).thenReturn(new Notification());
 
         CareerPath result = careerPathService.createCareerPath(careerPath);
 
         assertNotNull(result);
         verify(careerPathRepository, times(1)).save(careerPath);
+        verify(notificationRepository, times(1)).save(any(Notification.class));
     }
 
     @Test
