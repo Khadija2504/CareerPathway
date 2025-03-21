@@ -144,7 +144,14 @@ public class MentorshipServiceImpl implements MentorshipService, MentorshipFeedb
             Optional<Mentorship> mentorshipOpt = mentorshipRepository.findById(mentorshipId);
             if (mentorshipOpt.isPresent()) {
                 Mentorship mentorship = mentorshipOpt.get();
+                String message = "U have new feedback from " + mentorship.getMentee().getFirstName() + " " + mentorship.getMentee().getLastName();
                 feedback.setMentorship(mentorship);
+                Notification notification = new Notification();
+                notification.setRead(false);
+                notification.setUser(mentorship.getMentor());
+                notification.setMessage(message);
+                notification.setSentAt(LocalDateTime.now());
+                notificationRepository.save(notification);
                 return mentorshipFeedbackRepository.save(feedback);
             } else {
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Mentorship not found with ID: " + mentorshipId);
