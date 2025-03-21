@@ -306,6 +306,7 @@ class MentorshipServiceImplTest {
         Mentorship mentorship = createMentorship();
         when(mentorshipRepository.findById(1L)).thenReturn(Optional.of(mentorship));
         when(mentorshipFeedbackRepository.save(any(MentorshipFeedback.class))).thenReturn(feedback);
+        when(notificationRepository.save(any(Notification.class))).thenReturn(new Notification());
 
         MentorshipFeedback result = mentorshipService.createFeedback(feedback, 1L);
 
@@ -313,6 +314,7 @@ class MentorshipServiceImplTest {
         assertEquals("Great mentorship!", result.getFeedback());
         verify(mentorshipRepository, times(1)).findById(1L);
         verify(mentorshipFeedbackRepository, times(1)).save(feedback);
+        verify(notificationRepository, times(1)).save(any(Notification.class));
     }
 
     @Test
