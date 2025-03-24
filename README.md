@@ -4,11 +4,16 @@
 ## 📂 UML Class Diagram  
 🖼️ [Voir le diagramme UML dans drawio](https://drive.google.com/file/d/136YjdoE2QA3aa39QYP999r8cv9Hkr0BO/view?usp=sharing)
 
-![class diagram](CareerPathway.drawio.png)
+![class diagram](CareerPathway-class.drawio.png)
+
+## 📂 UML Use Case Diagram
+🖼️ [Voir le diagramme UML dans drawio](https://app.diagrams.net/?src=about#G136YjdoE2QA3aa39QYP999r8cv9Hkr0BO#%7B%22pageId%22%3A%22UmO6fCnqPAWRrfg_ZkGU%22%7D)
+
+![class diagram](CareerPathway-useCase.drawio.png)
 
 # 🚀 Employee Career Development & Training Platform
 
-![Project Banner](https://via.placeholder.com/1024x400.png?text=Employee+Career+Development+Platform) <!-- Replace with your banner image -->
+![Project Banner](Screenshot 2025-03-23 150828.png)
 
 A comprehensive platform for employee skill development, career path planning, and mentorship management. Built with **Spring Boot** (Backend) and **Angular** (Frontend).
 
@@ -22,32 +27,28 @@ A comprehensive platform for employee skill development, career path planning, a
 
 ## 🌟 Key Features
 
-### 📊 Skill Assessment & Analysis
-- Interactive skill evaluation quizzes
-- Detailed competency gap reports
-- Industry benchmark comparisons
+✅ **Skill assessments** through interactive tests.  
+✅ **Tailored training programs** based on employee needs.  
+✅ **Career recommendations** aligned with professional goals.  
+✅ **Progress tracking dashboards** with analytics.  
+✅ **Mentorship and coaching** for personalized career guidance.  
+✅ **Certifications and skill recognition** to validate learning achievements.
 
-### 🎓 Personalized Training
-- AI-driven course recommendations
-- Integration with Udemy/Coursera/LinkedIn Learning
-- Progress tracking dashboard
-
-### 🛤️ Career Path Planning
-- Customizable career roadmaps
-- Skill/certification requirements visualization
-- Milestone achievement alerts
-
-### 👥 Mentorship System
-- Mentor-employee matching algorithm
-- In-app messaging and video calls
-- Feedback-driven mentorship reviews
-
-### 🏆 Recognition System
-- Automated digital certifications
-- Badge-based reward system
-- Leaderboard for top performers
+This ensures a **seamless and efficient learning experience** for employees.
 
 ---
+
+## 📅 Task Planning & Management
+To efficiently manage the project, we have adopted an **Agile approach** with structured **sprints**:
+
+- 📌 **Phase 1**: Requirements analysis and UML design
+- 📌 **Phase 2**: Backend development (Spring Boot, PostgreSQL)
+- 📌 **Phase 3**: Frontend development (Angular)
+- 📌 **Phase 4**: Feature integration
+- 📌 **Phase 5**: Testing and debugging
+- 📌 **Phase 6**: Deployment and final validation
+
+Project tracking is managed using **Jira** to ensure a smooth workflow.
 
 ## 🛠️ Tech Stack
 
@@ -67,19 +68,15 @@ JWT | Secure Token Management
 
 Angular 15 | UI Framework
 
-RxJS | State Management
-
-PrimeNG | UI Component Library
-
 Chart.js | Data Visualization
+
+Tailwind CSS | CSS Framework
 
 **DevOps**  
 
 Docker | Containerization
 
-Jenkins | CI/CD Pipeline
-
-AWS EC2 | Cloud Hosting
+GitHub actions | CI/CD Pipeline
 
 ---
 
