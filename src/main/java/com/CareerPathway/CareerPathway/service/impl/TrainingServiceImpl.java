@@ -162,7 +162,6 @@ public class TrainingServiceImpl implements TrainingService {
             response.put("trainingPrograms", trainingPrograms);
             return response;
         } catch (Exception e) {
-            // Log the exception (consider using a logger)
             throw new RuntimeException("Error fetching recommendations", e);
         }
     }

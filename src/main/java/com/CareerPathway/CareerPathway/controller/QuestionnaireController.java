@@ -61,8 +61,9 @@ public class QuestionnaireController {
 
             SkillAssessment assessment = questionnaireService.submitQuestionnaireResponses(userId, skillId, responses);
 
-            trainingService.generateTrainingProgram(userId, skillId, assessment.getWeaknesses(), assessment.getSkillGaps(), assessment.getScore());
-
+            if(assessment.getScore() < 90) {
+                trainingService.generateTrainingProgram(userId, skillId, assessment.getWeaknesses(), assessment.getSkillGaps(), assessment.getScore());
+            }
             return ResponseEntity.ok(assessment);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
