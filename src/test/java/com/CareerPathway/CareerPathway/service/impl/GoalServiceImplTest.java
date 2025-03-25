@@ -83,7 +83,7 @@ class GoalServiceImplTest {
 
         assertNotNull(result);
         assertEquals("Learn Java", result.getGoalDescription());
-        assertEquals(1L, result.getEmployee().getId()); // Ensure the employee is correctly set
+        assertEquals(1L, result.getEmployee().getId());
         verify(goalRepository, times(1)).save(goal);
     }
 
