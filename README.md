@@ -13,7 +13,7 @@
 
 # 🚀 Employee Career Development & Training Platform
 
-![Project Banner](Screenshot 2025-03-23 150828.png)
+![Project Banner](Screenshot%202025-03-23%20150828.png)
 
 A comprehensive platform for employee skill development, career path planning, and mentorship management. Built with **Spring Boot** (Backend) and **Angular** (Frontend).
 
