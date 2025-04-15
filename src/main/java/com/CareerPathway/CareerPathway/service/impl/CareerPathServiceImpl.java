@@ -55,10 +55,6 @@ public class CareerPathServiceImpl implements CareerPathService {
 
     @Override
     public List<CareerPath> getAllCareerPaths() {
-        List<CareerPath> careerPaths = careerPathRepository.findAll();
-        if (careerPaths.isEmpty()) {
-            throw new NotFoundException("Error retrieving all career paths");
-        }
         return careerPathRepository.findAll();
     }
 
@@ -66,9 +62,6 @@ public class CareerPathServiceImpl implements CareerPathService {
     public CareerPath updateCareerPath(CareerPath careerPath, long careerPathId) {
         try {
             CareerPath oldCareerPath = getCareerPathById(careerPathId);
-            if (oldCareerPath == null) {
-                throw new NotFoundException("Career path not found");
-            }
 
             oldCareerPath.setName(careerPath.getName());
             oldCareerPath.setDescription(careerPath.getDescription());
@@ -136,9 +129,6 @@ public class CareerPathServiceImpl implements CareerPathService {
     public CareerPath updateCareerPathStatus(long careerPathId) {
         try {
             CareerPath careerPath = getCareerPathById(careerPathId);
-            if(careerPath == null) {
-                throw new NotFoundException("Career path not found");
-            }
             careerPath.setDone(true);
             return careerPathRepository.save(careerPath);
         } catch (ResponseStatusException e) {

@@ -1,5 +1,6 @@
 package com.CareerPathway.CareerPathway.service.impl;
 
+import com.CareerPathway.CareerPathway.exception.NotFoundException;
 import com.CareerPathway.CareerPathway.model.CareerPath;
 import com.CareerPathway.CareerPathway.model.CareerPathStep;
 import com.CareerPathway.CareerPathway.model.Notification;
@@ -111,7 +112,7 @@ class CareerPathServiceImplTest {
         long careerPathId = 1L;
         when(careerPathRepository.findById(careerPathId)).thenReturn(Optional.empty());
 
-        assertThrows(ResponseStatusException.class, () -> {
+        assertThrows(NotFoundException.class, () -> {
             careerPathService.getCareerPathById(careerPathId);
         });
 
