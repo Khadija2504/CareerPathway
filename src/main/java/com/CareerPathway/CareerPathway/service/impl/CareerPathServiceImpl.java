@@ -1,5 +1,6 @@
 package com.CareerPathway.CareerPathway.service.impl;
 
+import com.CareerPathway.CareerPathway.exception.NotFoundException;
 import com.CareerPathway.CareerPathway.model.CareerPath;
 import com.CareerPathway.CareerPathway.model.CareerPathStep;
 import com.CareerPathway.CareerPathway.model.Notification;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -44,20 +46,20 @@ public class CareerPathServiceImpl implements CareerPathService {
 
     @Override
     public List<CareerPath> getCareerPathsByEmployee(User employee) {
-        try {
-            return careerPathRepository.findCareerPathByEmployee(employee);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error retrieving career paths by employee", e);
+        List<CareerPath> careerPaths = careerPathRepository.findCareerPathByEmployee(employee);
+        if(careerPaths.isEmpty()) {
+            throw new NotFoundException("Error retrieving career paths by employee");
         }
+            return careerPaths;
     }
 
     @Override
     public List<CareerPath> getAllCareerPaths() {
-        try {
-            return careerPathRepository.findAll();
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error retrieving all career paths", e);
+        List<CareerPath> careerPaths = careerPathRepository.findAll();
+        if (careerPaths.isEmpty()) {
+            throw new NotFoundException("Error retrieving all career paths");
         }
+        return careerPathRepository.findAll();
     }
 
     @Override
@@ -65,7 +67,7 @@ public class CareerPathServiceImpl implements CareerPathService {
         try {
             CareerPath oldCareerPath = getCareerPathById(careerPathId);
             if (oldCareerPath == null) {
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Career path not found");
+                throw new NotFoundException("Career path not found");
             }
 
             oldCareerPath.setName(careerPath.getName());
@@ -95,14 +97,8 @@ public class CareerPathServiceImpl implements CareerPathService {
 
     @Override
     public CareerPath getCareerPathById(long id) {
-        try {
             Optional<CareerPath> careerPath = careerPathRepository.findById(id);
-            return careerPath.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Career path not found"));
-        } catch (ResponseStatusException e) {
-            throw e;
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error retrieving career path by ID", e);
-        }
+            return careerPath.orElseThrow(() -> new NotFoundException("Career path not found"));
     }
 
     @Override
@@ -113,7 +109,7 @@ public class CareerPathServiceImpl implements CareerPathService {
                 careerPathRepository.delete(careerPath.get());
                 return true;
             } else {
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Career path not found");
+                throw new NotFoundException("Career path not found");
             }
         } catch (ResponseStatusException e) {
             throw e;
@@ -126,7 +122,7 @@ public class CareerPathServiceImpl implements CareerPathService {
     public CareerPathStep updateCareerPathStep(boolean done, long stepId) {
         try {
             CareerPathStep careerPathStep = careerPathStepRepository.findById(stepId)
-                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Career path step not found"));
+                    .orElseThrow(() -> new NotFoundException("Career path step not found"));
             careerPathStep.setDone(done);
             return careerPathStepRepository.save(careerPathStep);
         } catch (ResponseStatusException e) {
@@ -140,6 +136,9 @@ public class CareerPathServiceImpl implements CareerPathService {
     public CareerPath updateCareerPathStatus(long careerPathId) {
         try {
             CareerPath careerPath = getCareerPathById(careerPathId);
+            if(careerPath == null) {
+                throw new NotFoundException("Career path not found");
+            }
             careerPath.setDone(true);
             return careerPathRepository.save(careerPath);
         } catch (ResponseStatusException e) {
