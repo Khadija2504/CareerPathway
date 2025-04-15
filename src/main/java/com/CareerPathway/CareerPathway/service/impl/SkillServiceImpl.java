@@ -64,19 +64,6 @@ public class SkillServiceImpl implements SkillService {
     }
 
     @Override
-    public boolean deleteSkill(Long id) {
-        Skill skill = skillRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Skill with ID " + id + " not found."));
-
-        try {
-            skillRepository.delete(skill);
-            return true;
-        } catch (Exception e) {
-            throw new RuntimeException("Error deleting skill.", e);
-        }
-    }
-
-    @Override
     public Skill findSkillById(Long id) {
         return skillRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Skill with ID " + id + " not found."));
