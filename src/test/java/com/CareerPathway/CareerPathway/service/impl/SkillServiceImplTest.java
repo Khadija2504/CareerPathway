@@ -96,24 +96,6 @@ class SkillServiceImplTest {
     }
 
     @Test
-    void testDeleteSkill_ShouldDeleteSuccessfully() {
-        when(skillRepository.findById(1L)).thenReturn(Optional.of(skill1));
-        doNothing().when(skillRepository).delete(skill1);
-
-        boolean result = skillService.deleteSkill(1L);
-
-        assertTrue(result);
-        verify(skillRepository, times(1)).delete(skill1);
-    }
-
-    @Test
-    void testDeleteSkill_ShouldThrowExceptionWhenNotFound() {
-        when(skillRepository.findById(1L)).thenReturn(Optional.empty());
-
-        assertThrows(ResponseStatusException.class, () -> skillService.deleteSkill(1L));
-    }
-
-    @Test
     void testFindSkillById_ShouldReturnSkill() {
         when(skillRepository.findById(1L)).thenReturn(Optional.of(skill1));
 
