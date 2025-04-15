@@ -46,7 +46,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/auth/**", "/uploads/**", "/api/mentorship/isMentorshipExist", "/api/messages/**", "/api/resources/user/**").permitAll()
                         .requestMatchers("/api/courses/admin/**", "/api/resources/admin/**", "/api/employee/goal/GoalSupported/**", "/api/employee/goal/allGoals", "/api/careerPath/admin/**", "/api/employee/skills/admin/**", "/api/employee/questionnaires/admin/**").hasRole("ADMIN")
                         .requestMatchers("/api/employee/goal/**", "/api/employee/questionnaires/**", "/api/mentorship/employee/**", "/api/training/**", "/api/careerPath/employee/**", "/api/certifications/**").hasRole("EMPLOYEE")
-                        .requestMatchers("/api/user/**", "/api/courses/employee/**", "/api/mentorship/mentor/**", "/api/resources/user/**", "/api/courses/**", "/api/mentorship/user/**", "api/admin/aggregated-results", "/api/notifications/**").authenticated()
+                        .requestMatchers("/api/user/**", "/api/courses/employee/**", "/api/mentorship/mentor/**", "/api/resources/user/**", "/api/courses/**", "/api/mentorship/user/**", "/api/admin/aggregated-results", "/api/notifications/**").authenticated()
                         .requestMatchers("/api/mentor/**").hasRole("MENTOR")
                         .anyRequest().authenticated()
                 )
