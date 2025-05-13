@@ -39,10 +39,17 @@ public class Training {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    @ManyToOne
+    @JoinColumn(name = "mentor_id", nullable = true)
+    private User mentor;
+
     @ElementCollection
     @CollectionTable(name = "training_skills", joinColumns = @JoinColumn(name = "training_id"))
     private List<String> skillsCovered;
 
     @Column(name = "created_date", nullable = false, updatable = false)
     private LocalDateTime createdDate;
+
+    private boolean completed;
+    private Integer score;
 }
