@@ -4,6 +4,7 @@ import com.CareerPathway.CareerPathway.model.*;
 import com.CareerPathway.CareerPathway.model.enums.Level;
 import com.CareerPathway.CareerPathway.repository.*;
 import com.CareerPathway.CareerPathway.service.TrainingService;
+import com.CareerPathway.CareerPathway.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -34,6 +35,13 @@ public class TrainingServiceImpl implements TrainingService {
 
     @Autowired
     private ResourceRepository resourceRepository;
+
+    @Autowired
+    private TrainingStepRepository trainingStepRepository;
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private NotificationRepository notificationRepository;
 
     @Override
     public void generateTrainingProgram(Long userId, Long skillId, List<String> weaknesses, List<String> skillGaps, int score) {
@@ -177,6 +185,31 @@ public class TrainingServiceImpl implements TrainingService {
             return trainingPage.getContent();
         } catch (Exception e) {
             throw new RuntimeException("Error fetching additional training programs", e);
+        }
+    }
+
+    @Override
+    public List<TrainingStep> createTrainingStep(Long trainingId, Long mentorId, List<TrainingStep> trainingSteps) {
+        List<TrainingStep> savedSteps = new ArrayList<>();
+        Training trainingProgram = trainingRepository.findById(trainingId).get();
+        User mentor = userService.findById(mentorId).get();
+        try{
+            for (TrainingStep step : trainingSteps) {
+                savedSteps.add(trainingStepRepository.save(step));
+            }
+            trainingProgram.setSteps(savedSteps);
+            trainingProgram.setMentor(mentor);
+
+            String message = "the mentor mr. " + mentor.getLastName() + " have been updated ur training program: ' "+ trainingProgram.getTitle() +" ' by adding new steps, check ur Training programs now!";
+            Notification notification = new Notification();
+            notification.setRead(false);
+            notification.setUser(trainingProgram.getUser());
+            notification.setMessage(message);
+            notification.setSentAt(LocalDateTime.now());
+            notificationRepository.save(notification);
+            return savedSteps;
+        } catch (Exception e){
+            throw new RuntimeException("Error creating training step", e);
         }
     }
 }

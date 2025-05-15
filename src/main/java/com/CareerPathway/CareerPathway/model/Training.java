@@ -1,6 +1,7 @@
 package com.CareerPathway.CareerPathway.model;
 
 import com.CareerPathway.CareerPathway.model.enums.Level;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
@@ -49,6 +50,10 @@ public class Training {
 
     @Column(name = "created_date", nullable = false, updatable = false)
     private LocalDateTime createdDate;
+
+    @OneToMany(mappedBy = "training", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<TrainingStep> steps;
 
     private boolean completed;
     private Integer score;
