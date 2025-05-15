@@ -6,6 +6,9 @@ import com.CareerPathway.CareerPathway.model.Training;
 import com.CareerPathway.CareerPathway.model.TrainingStep;
 import com.CareerPathway.CareerPathway.service.TrainingService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validation;
+import jakarta.validation.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @RestController
@@ -44,11 +48,19 @@ public class TrainingController {
 
     @PostMapping("/training-program-steps")
     public ResponseEntity<?> addTrainingProgramSteps(HttpServletRequest request, @RequestBody List<TrainingStepDTO> trainingStepsDTO, BindingResult result) {
-        if (result.hasErrors()) {
-            List<String> errors = result.getFieldErrors().stream()
-                    .map(error -> error.getField() + ": " + error.getDefaultMessage())
-                    .collect(Collectors.toList());
-            return ResponseEntity.badRequest().body(errors);
+        Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
+        List<String> validationErrors = new ArrayList<>();
+
+        for (int i = 0; i < trainingStepsDTO.size(); i++) {
+            TrainingStepDTO dto = trainingStepsDTO.get(i);
+            Set<ConstraintViolation<TrainingStepDTO>> violations = validator.validate(dto);
+            for (ConstraintViolation<TrainingStepDTO> violation : violations) {
+                validationErrors.add("Step " + (i + 1) + " - " + violation.getPropertyPath() + ": " + violation.getMessage());
+            }
+        }
+
+        if (!validationErrors.isEmpty()) {
+            return ResponseEntity.badRequest().body(validationErrors);
         }
         long mentorId = Long.parseLong(request.getAttribute("userId").toString());
         List<TrainingStep> trainingSteps = new ArrayList<>();

@@ -3,6 +3,7 @@ package com.CareerPathway.CareerPathway.service.impl;
 import com.CareerPathway.CareerPathway.model.*;
 import com.CareerPathway.CareerPathway.model.enums.Level;
 import com.CareerPathway.CareerPathway.repository.*;
+import com.CareerPathway.CareerPathway.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
@@ -28,6 +29,13 @@ public class TrainingServiceImplTest {
     private CourseRepository courseRepository;
     @Mock
     private ResourceRepository resourceRepository;
+    @Mock
+    private NotificationRepository notificationRepository;
+
+    @Mock
+    private TrainingStepRepository trainingStepRepository;
+    @Mock
+    private UserService userService;
 
     private Skill skill;
     private User user;
@@ -148,4 +156,39 @@ public class TrainingServiceImplTest {
         assertEquals(1, additionalTrainingPrograms.size());
         assertEquals(training, additionalTrainingPrograms.get(0));
     }
+
+    @Test
+    void createTrainingStep_shouldSaveStepsAndSendNotification() {
+        Training training = Training.builder()
+                .id(1L)
+                .user(user)
+                .title("Java Training")
+                .build();
+        User mentor = new User();
+        mentor.setId(2L);
+        mentor.setLastName("Smith");
+
+        TrainingStep step = new TrainingStep();
+        step.setTitle("Step 1");
+
+        when(trainingRepository.findById(1L)).thenReturn(Optional.of(training));
+        when(userService.findById(2L)).thenReturn(Optional.of(mentor));
+        when(trainingStepRepository.save(any())).thenReturn(step);
+
+        List<TrainingStep> steps = trainingService.createTrainingStep(1L, 2L, Collections.singletonList(step));
+
+        assertEquals(1, steps.size());
+        verify(notificationRepository).save(any(Notification.class));
+    }
+    @Test
+    void getAdditionalTrainingPrograms_shouldReturnPagedResult() {
+        Page<Training> page = new PageImpl<>(List.of(training));
+        when(trainingRepository.findByUser_Id(eq(user.getId()), any(Pageable.class))).thenReturn(page);
+
+        List<Training> result = trainingService.getAdditionalTrainingPrograms(user.getId(), 0, 10);
+
+        assertNotNull(result);
+        assertEquals(1, result.size());
+    }
+
 }
