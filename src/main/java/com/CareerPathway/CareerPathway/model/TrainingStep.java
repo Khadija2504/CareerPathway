@@ -28,6 +28,12 @@ public class TrainingStep {
     @JoinColumn(name = "course_id", nullable = false)
     @JsonBackReference
     private List<Course> courses;
+
+    @OneToMany
+    @JoinColumn(name = "resource_id", nullable = true)
+    @JsonBackReference
+    private List<Resource> resources;
+
     private boolean completed;
 
 }
