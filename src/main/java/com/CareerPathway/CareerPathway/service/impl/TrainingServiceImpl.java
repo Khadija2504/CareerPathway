@@ -212,4 +212,15 @@ public class TrainingServiceImpl implements TrainingService {
             throw new RuntimeException("Error creating training step", e);
         }
     }
+
+    public List<Training> getEmployeeTrainings(Long employeeId) {
+        System.out.println("inside the getEmployeeTrainings service");
+        try{
+            System.out.println("inside the try!! Employee id: " + employeeId);
+            System.out.println(trainingRepository.findByUserId(employeeId));
+            return trainingRepository.findByUserId(employeeId);
+        } catch (Exception e) {
+            throw new RuntimeException("Error fetching employee training programs", e);
+        }
+    }
 }

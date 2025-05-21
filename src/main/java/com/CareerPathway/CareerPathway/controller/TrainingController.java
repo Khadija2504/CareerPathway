@@ -22,7 +22,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/training")
+@RequestMapping("/api")
 public class TrainingController {
 
     @Autowired
@@ -30,13 +30,13 @@ public class TrainingController {
     @Autowired
     private TrainingStepMapper trainingStepMapper;
 
-    @GetMapping("/recommendations")
+    @GetMapping("/training/recommendations")
     public ResponseEntity<Map<String, Object>> getRecommendations(HttpServletRequest request) {
         long userId = Long.parseLong(request.getAttribute("userId").toString());
         return ResponseEntity.ok(trainingService.getRecommendations(userId));
     }
 
-    @GetMapping("/training-programs")
+    @GetMapping("/training/training-programs")
     public ResponseEntity<List<Training>> getAdditionalTrainingPrograms(
             HttpServletRequest request,
             @RequestParam(defaultValue = "0") int page,
@@ -46,7 +46,7 @@ public class TrainingController {
         return ResponseEntity.ok(trainingPrograms);
     }
 
-    @PostMapping("/training-program-steps")
+    @PostMapping("/mentee/training-program-steps")
     public ResponseEntity<?> addTrainingProgramSteps(HttpServletRequest request, @RequestBody List<TrainingStepDTO> trainingStepsDTO, BindingResult result) {
         Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
         List<String> validationErrors = new ArrayList<>();
@@ -69,5 +69,13 @@ public class TrainingController {
         }
         List<TrainingStep> savedTrainingSteps = trainingService.createTrainingStep(trainingSteps.stream().findFirst().get().getTraining().getId(), mentorId, trainingSteps);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedTrainingSteps);
+    }
+
+    @GetMapping("/mentee/mentee-training-program/{menteeId}")
+    public ResponseEntity<List<Training>> menteeTrainingPrograms(@PathVariable long menteeId) {
+        System.out.println("inside the controller");
+        List<Training> trainingPrograms = trainingService.getEmployeeTrainings(menteeId);
+        System.out.println(trainingPrograms);
+        return ResponseEntity.status(HttpStatus.FOUND).body(trainingPrograms);
     }
 }

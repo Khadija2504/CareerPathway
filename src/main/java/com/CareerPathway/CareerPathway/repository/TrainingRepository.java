@@ -18,4 +18,5 @@ public interface TrainingRepository extends JpaRepository<Training, Long> {
     Page<Training> findByUser_Id(Long userId, Pageable pageable);
     List<Training> findTop1ByUserIdOrderByCreatedDateDesc(Long userId);
     List<Training> findByUser(User user);
+    List<Training> findByUserId(Long userId);
 }
