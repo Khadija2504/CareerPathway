@@ -15,4 +15,5 @@ public interface TrainingService {
     Map<String, Object> getRecommendations(Long userId);
     List<Training> getAdditionalTrainingPrograms(Long userId, int page, int size);
     List<TrainingStep> createTrainingStep(Long trainingId,Long mentorId, List<TrainingStep> trainingSteps);
+    List<Training> getEmployeeTrainings(Long employeeId);
 }
